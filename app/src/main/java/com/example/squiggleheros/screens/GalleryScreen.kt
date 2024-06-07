@@ -13,7 +13,7 @@ fun GalleryScreen (navController: NavController){
 
     Scaffold(
         topBar = {
-            SimpleTopAppBar("Movie App", false, navController)
+            SimpleTopAppBar("squiggleHERO", false, navController)
         },
         bottomBar = {
             SimpleBottomAppBar(navController)
