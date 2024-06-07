@@ -12,7 +12,7 @@ fun CanvasScreen (navController: NavController){
 
     Scaffold(
         topBar = {
-            SimpleTopAppBar("Movie App", false, navController)
+            SimpleTopAppBar("SquiggleHERO", false, navController)
         },
         bottomBar = {
             SimpleBottomAppBar(navController)

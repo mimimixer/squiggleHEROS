@@ -12,7 +12,7 @@ fun DetailScreen (squiggleID: String?, navController: NavController){
 
     Scaffold(
         topBar = {
-            SimpleTopAppBar("Movie App", true, navController)
+            SimpleTopAppBar("squiggleHERO Detail", true, navController)
         },
         bottomBar = {
             SimpleBottomAppBar(navController)
