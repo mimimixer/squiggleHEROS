@@ -3,8 +3,12 @@ package com.example.squiggleheros.screens
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getString
 import androidx.navigation.NavController
 import com.example.squiggleheros.Greeting
+import com.example.squiggleheros.R
 import com.example.squiggleheros.composables.SimpleBottomAppBar
 import com.example.squiggleheros.composables.SimpleTopAppBar
 
@@ -13,14 +17,14 @@ fun GalleryScreen (navController: NavController){
 
     Scaffold(
         topBar = {
-            SimpleTopAppBar("squiggleHERO Gallery", false, navController)
+            SimpleTopAppBar(getString(LocalContext.current, R.string.gallery_screen), false, navController)
         },
         bottomBar = {
             SimpleBottomAppBar(navController)
         }
     ) { values ->
         Greeting(
-            name = "Galleryscreen",
+            name = getString(LocalContext.current, R.string.gallery_screen),
             paddingValues = values
         )
     }
