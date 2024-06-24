@@ -68,4 +68,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation("androidx.recyclerview:recyclerview:1.0.0")
+    implementation("com.github.QuadFlask:colorpicker:0.0.15")
+    implementation("com.google.android.material:material:1.12.0")
+
 }

@@ -13,19 +13,24 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.squiggleheros.R
+import com.example.squiggleheros.navigation.Screen
 import com.example.squiggleheros.navigation.bottomNavigationIcons
 
 
@@ -56,6 +61,26 @@ fun SimpleTopAppBar(topBarText: String, backArrow: Boolean, navController: NavCo
         )
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SimpleTopAppBarCanvas(title: String, showGalleryIcon: Boolean, navController: NavController) {
+    TopAppBar(
+        title = { Text(text = title) },
+        actions = {
+            if (showGalleryIcon) {
+                IconButton(onClick = { navController.navigate(Screen.Gallery.route) }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.gallery),
+                        contentDescription = "Gallery"
+                    )
+                }
+            }
+        }
+    )
+}
+
+
 
 @Composable
 fun SimpleBottomAppBar(navController: NavController) {
