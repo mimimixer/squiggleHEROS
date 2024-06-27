@@ -27,7 +27,7 @@ class PaintView @JvmOverloads constructor(
     // Set the background color (white in this case)
     private var backgroundColor = Color.WHITE
     var isEraserActive = false
-
+    var onDrawingChange: (() -> Unit)? = null
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val x = event.x
         val y = event.y
@@ -37,6 +37,7 @@ class PaintView @JvmOverloads constructor(
                 val newPath = Path()
                 newPath.moveTo(x, y)
                 pathList.add(newPath)
+                onDrawingChange?.invoke()
                 // Set the color explicitly based on the eraser state
                 val currentColor = if (isEraserActive) backgroundColor else brushColor
                 colorList.add(currentColor)
@@ -46,6 +47,7 @@ class PaintView @JvmOverloads constructor(
             MotionEvent.ACTION_MOVE -> {
                 val currentPath = pathList.lastOrNull()
                 currentPath?.lineTo(x, y)
+                onDrawingChange?.invoke()
             }
             else -> return false
         }

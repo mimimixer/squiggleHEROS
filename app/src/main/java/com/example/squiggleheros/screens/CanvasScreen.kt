@@ -10,10 +10,13 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +46,8 @@ fun PaintViewComposable(
     brushSize: Float,
     eraserSize: Float,
     isEraserActive: Boolean,
-    paintView: PaintView
+    paintView: PaintView,
+    onDrawingChange: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -54,6 +58,7 @@ fun PaintViewComposable(
                 this.brushSize = brushSize
                 this.eraserSize = eraserSize
                 this.isEraserActive = isEraserActive
+                this.onDrawingChange = onDrawingChange
 
             }
         },
@@ -89,19 +94,49 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
     }
 
 
+    var showSaveDialog by remember { mutableStateOf(false) }
+    var hasUnsavedChanges by remember { mutableStateOf(false) }
+    var pendingNavigationRoute by remember { mutableStateOf<String?>(null) }
+    var showNewDrawingDialog by remember { mutableStateOf(false) }
+
+    var navigationTarget by remember { mutableStateOf("") }
+    fun handleNavigation(route: String) {
+        if (hasUnsavedChanges) {
+            showSaveDialog = true
+            pendingNavigationRoute = route
+        } else {
+            navController.navigate(route)
+        }
+    }
 
 
 
 
     Scaffold(
         topBar = {
-            SimpleTopAppBarCanvas("SquiggleHeros", true, navController, onSaveClick = {
-                saveDrawing(context, paintView.getBitmap())
-                Toast.makeText(context, "Drawing saved", Toast.LENGTH_SHORT).show()
+            SimpleTopAppBarCanvas("SquiggleHeros", true, navController,
+                onSaveClick = {
+                    saveDrawing(context, paintView.getBitmap())
+                    hasUnsavedChanges = false
+                    Toast.makeText(context, "Drawing saved", Toast.LENGTH_SHORT).show()
             },
                 onNewDrawingClick = {
-                    navController.navigate("canvas_screen")
-                })
+                    if (hasUnsavedChanges) {
+                        navigationTarget = "canvas"
+                        showNewDrawingDialog = true
+                    } else {
+                        navController.navigate("canvas_screen")
+                    }
+                },
+                onGalleryClick = {
+                    if (hasUnsavedChanges) {
+                        navigationTarget = "gallery"
+                        showNewDrawingDialog = true
+                    } else {
+                        navController.navigate("gallery_screen")
+                    }
+                }
+                )
         },
         bottomBar = {
             NavigationBar {
@@ -183,28 +218,105 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                 brushSize = currentBrushSize,
                 eraserSize = currentEraserSize,
                 isEraserActive = isEraserActive,
-                paintView = paintView
+                paintView = paintView,
+                onDrawingChange = { hasUnsavedChanges = true }
             )
+
+
         }
-    }
-
-
-    fun saveDrawing(context: Context, bitmap: Bitmap) {
-        val fileName = "drawing_${UUID.randomUUID()}.png"
-        val directory =
-            ContextCompat.getExternalFilesDirs(context, Environment.DIRECTORY_PICTURES)[0]
-        val file = File(directory, fileName)
-
-        try {
-            FileOutputStream(file).use { out ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-                Toast.makeText(context, "Saved to ${file.absolutePath}", Toast.LENGTH_LONG).show()
+    if (showSaveDialog) {
+        UnsavedChangesDialog(
+            onSave = {
+                saveDrawing(context, paintView.getBitmap())
+                hasUnsavedChanges = false
+                pendingNavigationRoute?.let { navController.navigate(it) }
+                showSaveDialog = false
+            },
+            onDiscard = {
+                hasUnsavedChanges = false
+                pendingNavigationRoute?.let { navController.navigate(it) }
+                showSaveDialog = false
+            },
+            onCancel = {
+                showSaveDialog = false
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Toast.makeText(context, "Failed to save image", Toast.LENGTH_SHORT).show()
-        }
+        )
     }
+
+    if (showNewDrawingDialog) {
+        UnsavedChangesDialog(
+            onSave = {
+                saveDrawing(context, paintView.getBitmap())
+                hasUnsavedChanges = false
+                if (navigationTarget == "canvas") {
+                    navController.navigate("canvas_screen")
+                } else if (navigationTarget == "gallery") {
+                    navController.navigate("gallery_screen")
+                }
+                showNewDrawingDialog = false
+            },
+            onDiscard = {
+                hasUnsavedChanges = false
+                if (navigationTarget == "canvas") {
+                    navController.navigate("canvas_screen")
+                } else if (navigationTarget == "gallery") {
+                    navController.navigate("gallery_screen")
+                }
+                showNewDrawingDialog = false
+            },
+            onCancel = {
+                showNewDrawingDialog = false
+            }
+        )
+    }
+}
+
+
+
+
+
+
+@Composable
+fun UnsavedChangesDialog(
+    onSave: () -> Unit,
+    onDiscard: () -> Unit,
+    onCancel: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onCancel,
+        title = { Text("Unsaved Changes") },
+        text = { Text("You have unsaved changes. Do you want to save them before leaving?") },
+        confirmButton = {
+            Button(onClick = onSave) {
+                Text("Save")
+            }
+        },
+        dismissButton = {
+            Button(onClick = onDiscard) {
+                Text("Discard")
+            }
+        }
+    )
+}
+fun saveDrawing(context: Context, bitmap: Bitmap) {
+    val fileName = "drawing_${UUID.randomUUID()}.png"
+    val directory =
+        ContextCompat.getExternalFilesDirs(context, Environment.DIRECTORY_PICTURES)[0]
+    val file = File(directory, fileName)
+
+    try {
+        FileOutputStream(file).use { out ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            Toast.makeText(context, "Saved to ${file.absolutePath}", Toast.LENGTH_LONG).show()
+        }
+    } catch (e: IOException) {
+        e.printStackTrace()
+        Toast.makeText(context, "Failed to save image", Toast.LENGTH_SHORT).show()
+    }
+}
+
+
+
 
 
 /*@Composable

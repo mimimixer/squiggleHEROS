@@ -50,74 +50,101 @@ fun GalleryScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 128.dp),
-                contentPadding = PaddingValues(8.dp)
-            ) {
-                itemsIndexed(images) { index, imageFile ->
-                    val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
-                    Box(
-                        modifier = Modifier
-                            .padding(4.dp)
-                            .fillMaxWidth()
-                            .aspectRatio(1f)
-                            .clickable {
-                                val encodedPath = URLEncoder.encode(imageFile.absolutePath, StandardCharsets.UTF_8.toString())
-                                navController.navigate(Screen.Detail.route.replace("{$DETAIL_SCREEN_KEY}", encodedPath))
-                            }
-                    ) {
-                        Image(
-                            bitmap = bitmap.asImageBitmap(),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                        IconButton(
-                            onClick = {
-                                imageToDelete = imageFile
-                                showDialog = true
-                            },
-                            modifier = Modifier
-                                .align(Alignment.TopEnd)
-                                .size(24.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_delete), // Add your delete icon resource
-                                contentDescription = "Delete",
-                                tint = Color.Red // Adding a bright color for the delete icon
-                            )
-                        }
-                    }
-                }
-            }
+            ImageGrid(images, navController, onDeleteClick = {
+                imageToDelete = it
+                showDialog = true
+            })
         }
 
         if (showDialog && imageToDelete != null) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = { Text(text = "Delete Image") },
-                text = { Text(text = "Are you sure you want to delete this image?") },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            deleteImage(context, imageToDelete!!)
-                            images = loadImagesFromDirectory(context)
-                            showDialog = false
-                        },
-                        colors = ButtonDefaults.buttonColors(Color.Red) // Adding a bright color for the delete button
-                    ) {
-                        Text("Delete")
-                    }
-                },
-                dismissButton = {
-                    Button(
-                        onClick = { showDialog = false }
-                    ) {
-                        Text("Cancel")
-                    }
+            DeleteConfirmationDialog(
+                context = context,
+                imageToDelete = imageToDelete!!,
+                onDismiss = { showDialog = false },
+                onDeleteConfirmed = {
+                    deleteImage(context, imageToDelete!!)
+                    images = loadImagesFromDirectory(context)
+                    showDialog = false
                 }
             )
         }
     }
+}
+
+@Composable
+fun ImageGrid(
+    images: List<File>,
+    navController: NavController,
+    onDeleteClick: (File) -> Unit
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 128.dp),
+        contentPadding = PaddingValues(8.dp)
+    ) {
+        itemsIndexed(images) { _, imageFile ->
+            val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+            Box(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .clickable {
+                        val encodedPath = URLEncoder.encode(imageFile.absolutePath, StandardCharsets.UTF_8.toString())
+                        navController.navigate(Screen.Detail.route.replace("{$DETAIL_SCREEN_KEY}", encodedPath))
+                    }
+            ) {
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+                IconButton(
+                    onClick = { onDeleteClick(imageFile) },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .size(24.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_delete), // Add your delete icon resource
+                        contentDescription = "Delete",
+                        tint = Color.Red // Adding a bright color for the delete icon
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DeleteConfirmationDialog(
+    context: Context,
+    imageToDelete: File,
+    onDismiss: () -> Unit,
+    onDeleteConfirmed: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Delete Image") },
+        text = { Text(text = "Are you sure you want to delete this image?") },
+        confirmButton = {
+            Button(
+                onClick = {
+                    deleteImage(context, imageToDelete)
+                    onDeleteConfirmed()
+                },
+                colors = ButtonDefaults.buttonColors(Color.Red) // Adding a bright color for the delete button
+            ) {
+                Text("Delete")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = onDismiss
+            ) {
+                Text("Cancel")
+            }
+        }
+    )
 }
 
 fun loadImagesFromDirectory(context: Context): List<File> {

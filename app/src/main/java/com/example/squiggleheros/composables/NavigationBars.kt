@@ -69,7 +69,7 @@ fun SimpleTopAppBar(topBarText: String, backArrow: Boolean, navController: NavCo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SimpleTopAppBarCanvas(title: String, showGalleryIcon: Boolean, navController: NavController, onSaveClick: () -> Unit,
-                          onNewDrawingClick: () -> Unit) {
+                          onNewDrawingClick: ()-> Unit, onGalleryClick: ()->Unit) {
     TopAppBar(
         title = { Text(text = title) },
         actions = {
@@ -81,18 +81,18 @@ fun SimpleTopAppBarCanvas(title: String, showGalleryIcon: Boolean, navController
             }
             IconButton(onClick = onSaveClick) {
                 Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Save Drawing"
+                    painterResource(id = R.drawable.save),
+                    contentDescription = "Save"
                 )
             }
-            if (showGalleryIcon) {
-                IconButton(onClick = { navController.navigate(Screen.Gallery.route) }) {
+
+                IconButton(onClick = onGalleryClick){//{ navController.navigate(Screen.Gallery.route) }) {
                     Icon(
                         painter = painterResource(id = R.drawable.gallery),
                         contentDescription = "Gallery"
                     )
                 }
-            }
+
         }
     )
 }
