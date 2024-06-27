@@ -206,6 +206,13 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                             Color.MAGENTA
                         )
                         val newColor = colors[(colors.indexOf(backgroundColor) + 1) % colors.size]
+
+                        if (currentBrushColor == newColor) {
+                            setCurrentBrushColor(Color.BLACK)
+                            setSavedBrushColor(Color.BLACK)
+                            Toast.makeText(context, "Brush color changed to BLACK to avoid conflict with background color", Toast.LENGTH_SHORT).show()
+                        }
+
                         setBackgroundColor(newColor)
                         paintView.setBackgroundColor(newColor)
                     }
