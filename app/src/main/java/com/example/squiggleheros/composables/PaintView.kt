@@ -24,6 +24,8 @@ class PaintView @JvmOverloads constructor(
     private val colorList = ArrayList<Int>()
     private val sizeList = ArrayList<Float>()
 
+    private val eraserPathList = ArrayList<Path>()
+
     // Stack to keep track of undone paths for possible redo functionality
     private val undonePathList = ArrayList<Path>()
     private val undoneColorList = ArrayList<Int>()
@@ -41,18 +43,31 @@ class PaintView @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {
                 val newPath = Path()
                 newPath.moveTo(x, y)
-                pathList.add(newPath)
+                if (isEraserActive) {
+                    eraserPathList.add(newPath)
+                } else {
+                    pathList.add(newPath)
+                    val currentColor = if (isEraserActive) backgroundColor else brushColor
+                    colorList.add(currentColor)
+                    sizeList.add(if (isEraserActive) eraserSize else brushSize)
+                }
+
+                //pathList.add(newPath)
                 onDrawingChange?.invoke()
                 // Set the color explicitly based on the eraser state
-                val currentColor = if (isEraserActive) backgroundColor else brushColor
-                colorList.add(currentColor)
-                sizeList.add(if (isEraserActive) eraserSize else brushSize)
+                //val currentColor = if (isEraserActive) backgroundColor else brushColor
+                //colorList.add(currentColor)
+                //sizeList.add(if (isEraserActive) eraserSize else brushSize)
                 return true
             }
             MotionEvent.ACTION_MOVE -> {
-                val currentPath = pathList.lastOrNull()
+                /*val currentPath = pathList.lastOrNull()
+                currentPath?.lineTo(x, y)
+                onDrawingChange?.invoke()*/
+                val currentPath = if (isEraserActive) eraserPathList.lastOrNull() else pathList.lastOrNull()
                 currentPath?.lineTo(x, y)
                 onDrawingChange?.invoke()
+
             }
             else -> return false
         }
@@ -78,6 +93,18 @@ class PaintView @JvmOverloads constructor(
             }
 
             canvas.drawPath(currentPath, paint)
+        }
+
+        val eraserPaint = Paint().apply {
+            isAntiAlias = true
+            color = backgroundColor
+            style = Paint.Style.STROKE
+            strokeJoin = Paint.Join.ROUND
+            strokeWidth = eraserSize
+        }
+
+        for (eraserPath in eraserPathList) {
+            canvas.drawPath(eraserPath, eraserPaint)
         }
     }
 
@@ -109,6 +136,19 @@ class PaintView @JvmOverloads constructor(
 
             canvas.drawPath(currentPath, paint)
         }
+        val eraserPaint = Paint().apply {
+            isAntiAlias = true
+            color = backgroundColor
+            style = Paint.Style.STROKE
+            strokeJoin = Paint.Join.ROUND
+            strokeWidth = eraserSize
+        }
+
+        for (eraserPath in eraserPathList) {
+            canvas.drawPath(eraserPath, eraserPaint)
+        }
+
+
         return bitmap
     }
     // Method to undo the last path
