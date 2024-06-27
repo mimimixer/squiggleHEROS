@@ -9,6 +9,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -64,10 +68,23 @@ fun SimpleTopAppBar(topBarText: String, backArrow: Boolean, navController: NavCo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SimpleTopAppBarCanvas(title: String, showGalleryIcon: Boolean, navController: NavController) {
+fun SimpleTopAppBarCanvas(title: String, showGalleryIcon: Boolean, navController: NavController, onSaveClick: () -> Unit,
+                          onNewDrawingClick: () -> Unit) {
     TopAppBar(
         title = { Text(text = title) },
         actions = {
+            IconButton(onClick = onNewDrawingClick) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "New Drawing"
+                )
+            }
+            IconButton(onClick = onSaveClick) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Save Drawing"
+                )
+            }
             if (showGalleryIcon) {
                 IconButton(onClick = { navController.navigate(Screen.Gallery.route) }) {
                     Icon(
@@ -91,7 +108,8 @@ fun SimpleBottomAppBar(navController: NavController) {
             clip = true
             shape = RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)
             shadowElevation = 2.2f
-        }
+        },
+        backgroundColor = Color(0xFFFFC107) // Amber
     ) {// 24.03.29 https://developer.android.com/develop/ui/compose/navigation#bottom-nav
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
@@ -130,16 +148,20 @@ fun SimpleBottomAppBar(navController: NavController) {
                         } else {
                             item.unselectedIcon
                         },
-                        contentDescription = item.title
+                        contentDescription = item.title,
+                        tint = if (currentDestination?.hierarchy?.any { it.route == item.route } == true) Color.Cyan else Color.Green
                     )
                 },
                 label = {
-                    Text(text = item.title)
+                    Text(text = item.title,
+                        color = if (currentDestination?.hierarchy?.any { it.route == item.route } == true) Color.Cyan else Color.Green,
+                        style = MaterialTheme.typography.bodyMedium)
                 }
             )
         }
     }
 }
+
 
 @Composable
 fun BackArrow(hasArrow: Boolean, navController: NavController){
@@ -154,3 +176,41 @@ fun BackArrow(hasArrow: Boolean, navController: NavController){
         )
     }
 }
+
+@Composable
+fun SimpleBottomAppBar2(navController: NavController) {
+
+        BottomNavigation(
+            backgroundColor = Color(0xFFFFC107) // Amber color
+        ) {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+
+            bottomNavigationIcons.forEach { screen ->
+                BottomNavigationItem(
+                    icon = {
+                        Icon(
+                            imageVector = if (currentDestination?.route == screen.route) screen.selectedIcon else screen.unselectedIcon,
+                            contentDescription = screen.title
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = screen.title,
+                            color = if (currentDestination?.route == screen.route) Color.Cyan else Color.Green
+                        )
+                    },
+                    selected = currentDestination?.route == screen.route,
+                    onClick = {
+                        navController.navigate(screen.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                )
+            }
+        }
+    }

@@ -8,7 +8,7 @@ import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.ui.graphics.vector.ImageVector
 
-const val DETAIL_SCREEN_KEY = "squiggleID"
+const val DETAIL_SCREEN_KEY = "imagePath"
 
 sealed class Screen (
     val title: String,
@@ -34,6 +34,7 @@ sealed class Screen (
         unselectedIcon = Icons.Outlined.List,
         route = "gallery_screen"
     )
+
 }
 
 

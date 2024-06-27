@@ -9,6 +9,8 @@ import androidx.navigation.navArgument
 import com.example.squiggleheros.screens.CanvasScreen
 import com.example.squiggleheros.screens.DetailScreen
 import com.example.squiggleheros.screens.GalleryScreen
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 
 @Composable
@@ -19,11 +21,20 @@ import com.example.squiggleheros.screens.GalleryScreen
             navController = navController,
             startDestination = Screen.Canvas.route
         ){
-            composable(route = Screen.Canvas.route)
-            {
-                CanvasScreen(navController = navController)//, moviesViewModel = moviesViewModel)
+            composable(route = Screen.Canvas.route + "?imagePath={imagePath}",
+                arguments = listOf(
+                    navArgument("imagePath") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    }
+                )
+            ) { backStackEntry ->
+                val imagePath = backStackEntry.arguments?.getString("imagePath")?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.toString()) }
+                CanvasScreen(navController = navController, imagePath = imagePath)
             }
-            composable(
+
+            /*composable(
                 route = Screen.Detail.route + "/{$DETAIL_SCREEN_KEY}",
                 arguments = listOf(
                     navArgument(name = DETAIL_SCREEN_KEY) {
@@ -38,7 +49,22 @@ import com.example.squiggleheros.screens.GalleryScreen
                     navController = navController
                 )
                 // moviesViewModel = moviesViewModel)
+            }*/
+
+            composable(
+                route = Screen.Detail.route,
+                arguments = listOf(
+                    navArgument(DETAIL_SCREEN_KEY) {
+                        type = NavType.StringType
+                    }
+                )
+            ) { backStackEntry ->
+                val imagePath = backStackEntry.arguments?.getString(DETAIL_SCREEN_KEY)?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.toString()) }
+                imagePath?.let {
+                    DetailScreen(navController = navController, imagePath = it)
+                }
             }
+
             composable(route = Screen.Gallery.route
             )
             {

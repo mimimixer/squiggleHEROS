@@ -1,6 +1,7 @@
 package com.example.squiggleheros.composables
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -24,7 +25,7 @@ class PaintView @JvmOverloads constructor(
     private val sizeList = ArrayList<Float>()
 
     // Set the background color (white in this case)
-    private val backgroundColor = Color.WHITE
+    private var backgroundColor = Color.WHITE
     var isEraserActive = false
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -71,5 +72,36 @@ class PaintView @JvmOverloads constructor(
 
             canvas.drawPath(currentPath, paint)
         }
+    }
+
+    // Method to change the background color
+    override fun setBackgroundColor(newColor: Int) {
+        backgroundColor = newColor
+        invalidate()
+    }
+    fun getBitmap(): Bitmap {
+        // Create a bitmap with the same dimensions as the view
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        // Create a canvas to draw on the bitmap
+        val canvas = Canvas(bitmap)
+        // Draw the view's background
+        canvas.drawColor(backgroundColor)
+        // Draw the paths
+        for (i in pathList.indices) {
+            val currentPath = pathList[i]
+            val currentColor = colorList[i]
+            val currentSize = sizeList[i]
+
+            val paint = Paint().apply {
+                isAntiAlias = true
+                color = currentColor
+                style = Paint.Style.STROKE
+                strokeJoin = Paint.Join.ROUND
+                strokeWidth = currentSize
+            }
+
+            canvas.drawPath(currentPath, paint)
+        }
+        return bitmap
     }
 }
