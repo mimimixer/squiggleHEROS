@@ -84,7 +84,12 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
     val (savedBrushSize, setSavedBrushSize) = remember { mutableStateOf(currentBrushSize) }
     val (backgroundColor, setBackgroundColor) = remember { mutableStateOf(Color.WHITE) }
 
+    var showSaveDialog by remember { mutableStateOf(false) }
+    var hasUnsavedChanges by remember { mutableStateOf(false) }
+    var pendingNavigationRoute by remember { mutableStateOf<String?>(null) }
+    var showNewDrawingDialog by remember { mutableStateOf(false) }
 
+    var navigationTarget by remember { mutableStateOf("") }
 
     fun changeBrushSize() {
         val sizes = listOf(8f, 24f, 32f)
@@ -94,12 +99,6 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
     }
 
 
-    var showSaveDialog by remember { mutableStateOf(false) }
-    var hasUnsavedChanges by remember { mutableStateOf(false) }
-    var pendingNavigationRoute by remember { mutableStateOf<String?>(null) }
-    var showNewDrawingDialog by remember { mutableStateOf(false) }
-
-    var navigationTarget by remember { mutableStateOf("") }
     fun handleNavigation(route: String) {
         if (hasUnsavedChanges) {
             showSaveDialog = true
@@ -201,15 +200,29 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                             Color.WHITE,
                             Color.LTGRAY,
                             Color.DKGRAY,
+                            Color.YELLOW,
                             Color.CYAN,
+                            Color.GREEN,
                             Color.MAGENTA
                         )
                         val newColor = colors[(colors.indexOf(backgroundColor) + 1) % colors.size]
                         setBackgroundColor(newColor)
                         paintView.setBackgroundColor(newColor)
                     }
+                ) // Add undo button
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            painterResource(id = R.drawable.ic_undo),
+                            contentDescription = "Undo"
+                        )
+                    },
+                    selected = false,
+                    onClick = {
+                        paintView.undo()
+                        Toast.makeText(context, "Undo last action", Toast.LENGTH_SHORT).show()
+                    }
                 )
-
             }
         }
     )  {

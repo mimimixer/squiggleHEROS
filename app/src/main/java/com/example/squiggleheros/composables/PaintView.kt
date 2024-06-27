@@ -24,6 +24,11 @@ class PaintView @JvmOverloads constructor(
     private val colorList = ArrayList<Int>()
     private val sizeList = ArrayList<Float>()
 
+    // Stack to keep track of undone paths for possible redo functionality
+    private val undonePathList = ArrayList<Path>()
+    private val undoneColorList = ArrayList<Int>()
+    private val undoneSizeList = ArrayList<Float>()
+
     // Set the background color (white in this case)
     private var backgroundColor = Color.WHITE
     var isEraserActive = false
@@ -105,5 +110,26 @@ class PaintView @JvmOverloads constructor(
             canvas.drawPath(currentPath, paint)
         }
         return bitmap
+    }
+    // Method to undo the last path
+    fun undo() {
+        if (pathList.isNotEmpty()) {
+            undonePathList.add(pathList.removeAt(pathList.size - 1))
+            undoneColorList.add(colorList.removeAt(colorList.size - 1))
+            undoneSizeList.add(sizeList.removeAt(sizeList.size - 1))
+            onDrawingChange?.invoke()
+            invalidate()
+        }
+    }
+
+    // Optional: Method to redo the last undone path
+    fun redo() {
+        if (undonePathList.isNotEmpty()) {
+            pathList.add(undonePathList.removeAt(undonePathList.size - 1))
+            colorList.add(undoneColorList.removeAt(undoneColorList.size - 1))
+            sizeList.add(undoneSizeList.removeAt(undoneSizeList.size - 1))
+            onDrawingChange?.invoke()
+            invalidate()
+        }
     }
 }
