@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.squiggleheros.R
-import com.example.squiggleheros.composables.SimpleBottomAppBar
 import com.example.squiggleheros.composables.SimpleTopAppBar
 import com.example.squiggleheros.navigation.DETAIL_SCREEN_KEY
 import com.example.squiggleheros.navigation.Screen
+import com.example.squiggleheros.utils.PreferenceManager
 import java.io.File
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -34,6 +34,10 @@ import java.nio.charset.StandardCharsets
 fun GalleryScreen(navController: NavController) {
     val context = LocalContext.current
     var images by remember { mutableStateOf(loadImagesFromDirectory(context)) }
+
+    // Load favorite states from SharedPreferences
+    var favorites by remember { mutableStateOf(PreferenceManager.loadFavorites(context)) }
+    var showFavoritesOnly by remember { mutableStateOf(false) }
     var imageToDelete by remember { mutableStateOf<File?>(null) }
     var showDialog by remember { mutableStateOf(false) }
 
@@ -41,19 +45,75 @@ fun GalleryScreen(navController: NavController) {
         topBar = {
             SimpleTopAppBar(ContextCompat.getString(LocalContext.current, R.string.app_name), true, navController)
         },
-        /*bottomBar = {
-            SimpleBottomAppBar(navController)
-        }*/
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            ImageGrid(images, navController, onDeleteClick = {
-                imageToDelete = it
-                showDialog = true
-            })
+            Button(
+                onClick = { showFavoritesOnly = !showFavoritesOnly },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(if (showFavoritesOnly) "Show All" else "Show Favorites")
+            }
+
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 128.dp),
+                contentPadding = PaddingValues(8.dp)
+            ) {
+                val displayedImages = if (showFavoritesOnly) images.filter { it.absolutePath in favorites } else images
+                itemsIndexed(displayedImages) { _, imageFile ->
+                    val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+                    Box(
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .clickable {
+                                val encodedPath = URLEncoder.encode(imageFile.absolutePath, StandardCharsets.UTF_8.toString())
+                                navController.navigate(Screen.Detail.route.replace("{$DETAIL_SCREEN_KEY}", encodedPath))
+                            }
+                    ) {
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                        IconButton(
+                            onClick = { imageToDelete = imageFile; showDialog = true },
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .size(24.dp)
+                        ) {
+                            /*Icon(
+                                painter = painterResource(id = R.drawable.ic_delete),
+                                contentDescription = "Delete",
+                                tint = Color.Red
+                            )*/
+                        }
+                        IconButton(
+                            onClick = {
+                                if (imageFile.absolutePath in favorites) {
+                                    favorites = favorites - imageFile.absolutePath
+                                } else {
+                                    favorites = favorites + imageFile.absolutePath
+                                }
+                                PreferenceManager.saveFavorites(context, favorites)
+                            },
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .size(24.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = if (imageFile.absolutePath in favorites) R.drawable.ic_favorite else R.drawable.ic_favorite_border),
+                                contentDescription = "Favorite",
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         if (showDialog && imageToDelete != null) {
@@ -67,50 +127,6 @@ fun GalleryScreen(navController: NavController) {
                     showDialog = false
                 }
             )
-        }
-    }
-}
-
-@Composable
-fun ImageGrid(
-    images: List<File>,
-    navController: NavController,
-    onDeleteClick: (File) -> Unit
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 128.dp),
-        contentPadding = PaddingValues(8.dp)
-    ) {
-        itemsIndexed(images) { _, imageFile ->
-            val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
-            Box(
-                modifier = Modifier
-                    .padding(4.dp)
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-                    .clickable {
-                        val encodedPath = URLEncoder.encode(imageFile.absolutePath, StandardCharsets.UTF_8.toString())
-                        navController.navigate(Screen.Detail.route.replace("{$DETAIL_SCREEN_KEY}", encodedPath))
-                    }
-            ) {
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
-                IconButton(
-                    onClick = { onDeleteClick(imageFile) },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .size(24.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_delete), // Add your delete icon resource
-                        contentDescription = "Delete",
-                        tint = Color.Red // Adding a bright color for the delete icon
-                    )
-                }
-            }
         }
     }
 }
@@ -132,7 +148,7 @@ fun DeleteConfirmationDialog(
                     deleteImage(context, imageToDelete)
                     onDeleteConfirmed()
                 },
-                colors = ButtonDefaults.buttonColors(Color.Red) // Adding a bright color for the delete button
+                colors = ButtonDefaults.buttonColors(Color.Red)
             ) {
                 Text("Delete")
             }
