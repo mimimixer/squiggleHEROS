@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.os.Environment
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -51,11 +53,20 @@ fun GalleryScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Button(
-                onClick = { showFavoritesOnly = !showFavoritesOnly },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+            Row(
+                Modifier
+                    .clickable { showFavoritesOnly = !showFavoritesOnly }
+                    //onClick = ,
+                    .align(Alignment.CenterHorizontally)
+
+                    .background(colorResource(id = R.color.Blossom_Pink))
+                    .fillMaxWidth()
+                    .height(30.dp),
+                horizontalArrangement =Arrangement.Center,
+                verticalAlignment =Alignment.CenterVertically
+
             ) {
-                Text(if (showFavoritesOnly) "Show All" else "Show Favorites")
+                Text(if (showFavoritesOnly) "Show All" else "Show Favorites", Modifier.height(25.dp))
             }
 
             LazyVerticalGrid(
@@ -67,12 +78,20 @@ fun GalleryScreen(navController: NavController) {
                     val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
                     Box(
                         modifier = Modifier
-                            .padding(4.dp)
+                            .padding(15.dp)
                             .fillMaxWidth()
                             .aspectRatio(1f)
                             .clickable {
-                                val encodedPath = URLEncoder.encode(imageFile.absolutePath, StandardCharsets.UTF_8.toString())
-                                navController.navigate(Screen.Detail.route.replace("{$DETAIL_SCREEN_KEY}", encodedPath))
+                                val encodedPath = URLEncoder.encode(
+                                    imageFile.absolutePath,
+                                    StandardCharsets.UTF_8.toString()
+                                )
+                                navController.navigate(
+                                    Screen.Detail.route.replace(
+                                        "{$DETAIL_SCREEN_KEY}",
+                                        encodedPath
+                                    )
+                                )
                             }
                     ) {
                         Image(
@@ -80,18 +99,18 @@ fun GalleryScreen(navController: NavController) {
                             contentDescription = null,
                             modifier = Modifier.fillMaxSize()
                         )
-                        IconButton(
+                        /*IconButton(
                             onClick = { imageToDelete = imageFile; showDialog = true },
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
                                 .size(24.dp)
                         ) {
-                            /*Icon(
+                            Icon(
                                 painter = painterResource(id = R.drawable.ic_delete),
                                 contentDescription = "Delete",
                                 tint = Color.Red
-                            )*/
-                        }
+                            )
+                        }*/
                         IconButton(
                             onClick = {
                                 if (imageFile.absolutePath in favorites) {
@@ -108,7 +127,7 @@ fun GalleryScreen(navController: NavController) {
                             Icon(
                                 painter = painterResource(id = if (imageFile.absolutePath in favorites) R.drawable.ic_favorite else R.drawable.ic_favorite_border),
                                 contentDescription = "Favorite",
-                                tint = MaterialTheme.colorScheme.primary
+                                tint = colorResource(id = R.color.Bean_Red)
                             )
                         }
                     }

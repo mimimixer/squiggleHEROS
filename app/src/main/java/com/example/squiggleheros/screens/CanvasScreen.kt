@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -30,9 +31,12 @@ import com.example.squiggleheros.R
 import com.example.squiggleheros.composables.SimpleBottomAppBar
 import com.example.squiggleheros.composables.SimpleTopAppBar
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColor
 import com.example.squiggleheros.composables.PaintView
 import com.example.squiggleheros.composables.SimpleTopAppBarCanvas
 import java.io.File
@@ -140,10 +144,13 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
+                    label={Text(currentBrushSize.toString())},
                     icon = {
                         Icon(
                             painterResource(id = R.drawable.brush_size),
-                            contentDescription = "Brush"
+                            contentDescription = "Brush",
+                            Modifier.size(30.dp),
+                            tint = colorResource(id = R.color.Orange)
                         )
                     },
                     selected = !isEraserActive,
@@ -155,10 +162,13 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     }
                 )
                 NavigationBarItem(
+                    label = { Text(colorToName(currentBrushColor)) },
                     icon = {
                         Icon(
                             painterResource(id = R.drawable.color_picker),
-                            contentDescription = "Color"
+                            contentDescription = "Color",
+                            Modifier.size(30.dp),
+                            tint = androidx.compose.ui.graphics.Color(currentBrushColor)
                         )
                     },
                     selected = !isEraserActive,
@@ -172,10 +182,14 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     }
                 )
                 NavigationBarItem(
+                    label={Text(currentEraserSize.toString())},
                     icon = {
                         Icon(
                             painterResource(id = R.drawable.eraser),
-                            contentDescription = "Eraser"
+                            contentDescription = "Eraser",
+                            Modifier.size(30.dp),
+                            tint = colorResource(id = R.color.LightPink)
+
                         )
                     },
                     selected = isEraserActive,
@@ -188,10 +202,13 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     }
                 )
                 NavigationBarItem(
+                    label = { Text(colorToName(backgroundColor)) },
                     icon = {
                         Icon(
                             painterResource(id = R.drawable.background),
-                            contentDescription = "Background Color"
+                            contentDescription = "Background Color",
+                            Modifier.size(30.dp),
+                            tint = androidx.compose.ui.graphics.Color(backgroundColor)
                         )
                     },
                     selected = false,
@@ -218,10 +235,13 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     }
                 ) // Add undo button
                 NavigationBarItem(
+                    label={Text("Undo")},
                     icon = {
                         Icon(
                             painterResource(id = R.drawable.ic_undo),
-                            contentDescription = "Undo"
+                            contentDescription = "Undo",
+                            Modifier.size(30.dp),
+                            tint = colorResource(id = R.color.MediumSlateBlue)
                         )
                     },
                     selected = false,
@@ -312,10 +332,12 @@ fun UnsavedChangesDialog(
             }
         },
         dismissButton = {
-            Button(onClick = onDiscard) {
+            Button(onClick = onDiscard,) {
                 Text("Discard")
+
             }
-        }
+        },
+        containerColor = colorResource(id = R.color.PowderBlue)
     )
 }
 fun saveDrawing(context: Context, bitmap: Bitmap) {
@@ -335,7 +357,25 @@ fun saveDrawing(context: Context, bitmap: Bitmap) {
     }
 }
 
+fun colorToHexString(color: Int): String {
+    return String.format("#%06X", 0xFFFFFF and color)
+}
 
+fun colorToName(color: Int): String {
+    return when (color) {
+        Color.BLACK -> "Black"
+        Color.WHITE -> "White"
+        Color.RED -> "Red"
+        Color.GREEN -> "Green"
+        Color.BLUE -> "Blue"
+        Color.YELLOW -> "Yellow"
+        Color.CYAN -> "Cyan"
+        Color.MAGENTA -> "Magenta"
+        Color.LTGRAY -> "LtGray"
+        Color.DKGRAY -> "DkGray"
+        else -> colorToHexString(color)  // Return the hex string if the color name is not found
+    }
+}
 
 
 

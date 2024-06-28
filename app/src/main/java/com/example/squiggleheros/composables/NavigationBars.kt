@@ -4,13 +4,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -34,7 +36,6 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.squiggleheros.R
-import com.example.squiggleheros.navigation.Screen
 import com.example.squiggleheros.navigation.bottomNavigationIcons
 
 
@@ -60,8 +61,8 @@ fun SimpleTopAppBar(topBarText: String, backArrow: Boolean, navController: NavCo
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary
+            containerColor = colorResource(id = R.color.Azure),
+            titleContentColor = colorResource(id = R.color.Cornflower_Blue)
         )
     )
 }
@@ -71,25 +72,39 @@ fun SimpleTopAppBar(topBarText: String, backArrow: Boolean, navController: NavCo
 fun SimpleTopAppBarCanvas(title: String, showGalleryIcon: Boolean, navController: NavController, onSaveClick: () -> Unit,
                           onNewDrawingClick: ()-> Unit, onGalleryClick: ()->Unit) {
     TopAppBar(
+
         title = { Text(text = title) },
+
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = colorResource(id = R.color.Azure),
+            titleContentColor = colorResource(id = R.color.Cornflower_Blue)),
+
         actions = {
             IconButton(onClick = onNewDrawingClick) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "New Drawing"
+                    contentDescription = "New Drawing",
+                    Modifier.size(30.dp),
+                    tint = colorResource(id = R.color.CornflowerBlue)
+
                 )
             }
+            Spacer(modifier = Modifier.width(16.dp)) // Add spacing between icons
             IconButton(onClick = onSaveClick) {
                 Icon(
-                    painterResource(id = R.drawable.save),
-                    contentDescription = "Save"
+                    painterResource(id = R.drawable.ic_save),
+                    contentDescription = "Save",
+                    Modifier.size(30.dp),
+                    tint = colorResource(id = R.color.HotPink)
                 )
             }
-
+            Spacer(modifier = Modifier.width(16.dp)) // Add spacing between icons
                 IconButton(onClick = onGalleryClick){//{ navController.navigate(Screen.Gallery.route) }) {
                     Icon(
                         painter = painterResource(id = R.drawable.gallery),
-                        contentDescription = "Gallery"
+                        contentDescription = "Gallery",
+                        Modifier.size(30.dp),
+                        tint = colorResource(id = R.color.MediumSeaGreen)
                     )
                 }
 
