@@ -20,7 +20,7 @@ sealed class Screen (
         title = "Canvas",
         selectedIcon = Icons.Filled.Create,
         unselectedIcon = Icons.Outlined.Create,
-        route = "canvas_screen"
+        route = "canvas_screen?imagePath={imagePath}"
     )
     object Detail: Screen(
         title = "Detail Screen",

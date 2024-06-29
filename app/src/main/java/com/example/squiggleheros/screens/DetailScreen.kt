@@ -174,7 +174,7 @@ fun EditIcon(navController: NavController, filePath: String) {
         IconButton(
             onClick = {
                 val encodedPath = URLEncoder.encode(filePath, StandardCharsets.UTF_8.toString())
-                navController.navigate(Screen.Canvas.route.replace("{$DETAIL_SCREEN_KEY}", encodedPath))
+                navController.navigate("canvas_screen?imagePath=$encodedPath")
             }
         ) {
             Icon(painterResource(id = R.drawable.brush_size),

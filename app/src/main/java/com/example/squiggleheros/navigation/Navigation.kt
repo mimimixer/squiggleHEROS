@@ -21,16 +21,15 @@ import java.nio.charset.StandardCharsets
             navController = navController,
             startDestination = Screen.Canvas.route
         ){
-            composable(route = Screen.Canvas.route + "?imagePath={imagePath}",
-                arguments = listOf(
-                    navArgument("imagePath") {
-                        type = NavType.StringType
-                        nullable = true
-                        defaultValue = null
-                    }
-                )
+            composable(
+                route = "canvas_screen?imagePath={imagePath}",
+                arguments = listOf(navArgument("imagePath") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                })
             ) { backStackEntry ->
-                val imagePath = backStackEntry.arguments?.getString("imagePath")?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.toString()) }
+                val imagePath = backStackEntry.arguments?.getString("imagePath")
                 CanvasScreen(navController = navController, imagePath = imagePath)
             }
 

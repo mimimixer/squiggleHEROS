@@ -29,6 +29,8 @@ class PaintView @JvmOverloads constructor(
     private val undoneColorList = ArrayList<Int>()
     private val undoneSizeList = ArrayList<Float>()
 
+    private var backgroundBitmap: Bitmap? = null
+
     private var backgroundColor = Color.WHITE
     var isEraserActive = false
     var onDrawingChange: (() -> Unit)? = null
@@ -65,7 +67,14 @@ class PaintView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        canvas.drawColor(backgroundColor)
+        //canvas.drawColor(backgroundColor)
+
+        // Draw the background bitmap if available, otherwise fill the entire canvas with the background color
+        backgroundBitmap?.let {
+            canvas.drawBitmap(it, 0f, 0f, null)
+        } ?: run {
+            canvas.drawColor(backgroundColor)
+        }
 
         for (i in pathList.indices) {
             val (currentPath, isEraser) = pathList[i]
@@ -90,13 +99,25 @@ class PaintView @JvmOverloads constructor(
 
     override fun setBackgroundColor(newColor: Int) {
         backgroundColor = newColor
+        backgroundBitmap = null
+        invalidate()
+    }
+
+
+    fun loadBitmap(bitmap: Bitmap) {
+        backgroundBitmap = bitmap
         invalidate()
     }
 
     fun getBitmap(): Bitmap {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        canvas.drawColor(backgroundColor)
+        //canvas.drawColor(backgroundColor)
+        backgroundBitmap?.let {
+            canvas.drawBitmap(it, 0f, 0f, null)
+        } ?: run {
+            canvas.drawColor(backgroundColor)
+        }
 
         for (i in pathList.indices) {
             val (currentPath, isEraser) = pathList[i]
@@ -120,6 +141,7 @@ class PaintView @JvmOverloads constructor(
 
         return bitmap
     }
+
 
     // Method to undo the last path
     fun undo() {

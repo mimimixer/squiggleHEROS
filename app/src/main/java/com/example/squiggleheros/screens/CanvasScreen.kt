@@ -19,6 +19,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -112,7 +113,13 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
         }
     }
 
-
+// Load the image if an imagePath is provided
+    LaunchedEffect(imagePath) {
+        imagePath?.let {
+            val bitmap = BitmapFactory.decodeFile(it)
+            paintView.loadBitmap(bitmap)
+        }
+    }
 
 
     Scaffold(
