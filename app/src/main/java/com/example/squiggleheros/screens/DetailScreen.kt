@@ -14,6 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -33,9 +35,11 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun DetailScreen(navController: NavController, imagePath: String) {
     val context = LocalContext.current
+    val configurate = LocalConfiguration.current
+    val screenHeight = configurate.screenHeightDp.dp
     var file by remember { mutableStateOf(File(imagePath)) }
     var fileName by remember { mutableStateOf(TextFieldValue(file.name)) }
-    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+    val bitmap = BitmapFactory.decodeFile(file.absolutePath).asImageBitmap()
     var showDeleteDialog by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -53,12 +57,22 @@ fun DetailScreen(navController: NavController, imagePath: String) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            bitmap?.let {
-                DisplayImage(it.asImageBitmap())
-            } ?: run {
-                Text(text = "Image not found", color = MaterialTheme.colorScheme.error)
+            Column (
+                Modifier.fillMaxHeight(0.7f)
+            ){
+                bitmap?.let {
+                    //DisplayImage(it){
+                        Image(
+                            bitmap = bitmap,
+                            contentDescription = null,
+                            modifier = Modifier.height(screenHeight*0.7f),
+                            contentScale = ContentScale.Fit
+                        )
+                   // }
+                } ?: run {
+                    Text(text = "Image not found", color = MaterialTheme.colorScheme.error)
+                }
             }
-
             FileNameInput(fileName) { fileName = it }
             Row(modifier = Modifier
                 .height(140.dp)

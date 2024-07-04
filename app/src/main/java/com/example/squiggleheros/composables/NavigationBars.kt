@@ -164,12 +164,12 @@ fun SimpleBottomAppBar(navController: NavController) {
                             item.unselectedIcon
                         },
                         contentDescription = item.title,
-                        tint = if (currentDestination?.hierarchy?.any { it.route == item.route } == true) Color.Cyan else Color.Green
+                        tint = if (currentDestination?.hierarchy?.any { it.route == item.route } == true) Color.Cyan else Color.Blue
                     )
                 },
                 label = {
                     Text(text = item.title,
-                        color = if (currentDestination?.hierarchy?.any { it.route == item.route } == true) Color.Cyan else Color.Green,
+                        color = if (currentDestination?.hierarchy?.any { it.route == item.route } == true) Color.Cyan else Color.Blue,
                         style = MaterialTheme.typography.bodyMedium)
                 }
             )
