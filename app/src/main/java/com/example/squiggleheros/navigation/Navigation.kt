@@ -30,6 +30,7 @@ import java.nio.charset.StandardCharsets
                 })
             ) { backStackEntry ->
                 val imagePath = backStackEntry.arguments?.getString("imagePath")
+                println(imagePath)
                 CanvasScreen(navController = navController, imagePath = imagePath)
             }
 
@@ -60,6 +61,7 @@ import java.nio.charset.StandardCharsets
             ) { backStackEntry ->
                 val imagePath = backStackEntry.arguments?.getString(DETAIL_SCREEN_KEY)?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.toString()) }
                 imagePath?.let {
+                    println(imagePath)
                     DetailScreen(navController = navController, imagePath = it)
                 }
             }
