@@ -82,7 +82,7 @@ fun SimpleTopAppBarCanvas(title: String, showGalleryIcon: Boolean, navController
         actions = {
             IconButton(onClick = onNewDrawingClick) {
                 Icon(
-                    imageVector = Icons.Default.Delete,
+                    painterResource(id = R.drawable.renew),
                     contentDescription = "New Drawing",
                     Modifier.size(30.dp),
                     tint = colorResource(id = R.color.CornflowerBlue)

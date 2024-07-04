@@ -24,8 +24,6 @@ import androidx.navigation.NavController
 import com.example.squiggleheros.R
 import com.example.squiggleheros.composables.SimpleBottomAppBar
 import com.example.squiggleheros.composables.SimpleTopAppBar
-import com.example.squiggleheros.navigation.DETAIL_SCREEN_KEY
-import com.example.squiggleheros.navigation.Screen
 import java.io.File
 import java.io.IOException
 import java.io.OutputStream
@@ -177,7 +175,7 @@ fun EditIcon(navController: NavController, filePath: String) {
                 navController.navigate("canvas_screen?imagePath=$encodedPath")
             }
         ) {
-            Icon(painterResource(id = R.drawable.brush_size),
+            Icon(painterResource(id = R.drawable.draw),
                 contentDescription = "Edit Image",
                 Modifier.size(100.dp),
                 tint = colorResource(id = R.color.Orange)

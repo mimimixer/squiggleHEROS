@@ -7,9 +7,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Environment
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -25,19 +22,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.core.content.ContextCompat.getString
 import androidx.navigation.NavController
-import com.example.squiggleheros.Greeting
 import com.example.squiggleheros.R
-import com.example.squiggleheros.composables.SimpleBottomAppBar
-import com.example.squiggleheros.composables.SimpleTopAppBar
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.toColor
 import com.example.squiggleheros.composables.PaintView
 import com.example.squiggleheros.composables.SimpleTopAppBarCanvas
 import java.io.File
@@ -154,7 +146,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     label={Text(currentBrushSize.toString())},
                     icon = {
                         Icon(
-                            painterResource(id = R.drawable.brush_size),
+                            painterResource(id = R.drawable.draw),
                             contentDescription = "Brush",
                             Modifier.size(30.dp),
                             tint = colorResource(id = R.color.Orange)
