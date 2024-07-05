@@ -35,11 +35,9 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun DetailScreen(navController: NavController, imagePath: String) {
     val context = LocalContext.current
-    val configurate = LocalConfiguration.current
-    val screenHeight = configurate.screenHeightDp.dp
     var file by remember { mutableStateOf(File(imagePath)) }
     var fileName by remember { mutableStateOf(TextFieldValue(file.name)) }
-    val bitmap = BitmapFactory.decodeFile(file.absolutePath).asImageBitmap()
+    val bitmap = BitmapFactory.decodeFile(file.absolutePath)
     var showDeleteDialog by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -58,17 +56,10 @@ fun DetailScreen(navController: NavController, imagePath: String) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column (
-                Modifier.fillMaxHeight(0.7f)
+                Modifier.fillMaxHeight(0.72f)
             ){
                 bitmap?.let {
-                    //DisplayImage(it){
-                        Image(
-                            bitmap = bitmap,
-                            contentDescription = null,
-                            modifier = Modifier.height(screenHeight*0.7f),
-                            contentScale = ContentScale.Fit
-                        )
-                   // }
+                    DisplayImage(it.asImageBitmap())
                 } ?: run {
                     Text(text = "Image not found", color = MaterialTheme.colorScheme.error)
                 }
@@ -108,13 +99,17 @@ fun DetailScreen(navController: NavController, imagePath: String) {
 
 @Composable
 fun DisplayImage(bitmap: androidx.compose.ui.graphics.ImageBitmap) {
+    val configurate = LocalConfiguration.current
+    val screenHeight = configurate.screenHeightDp.dp
     Image(
         bitmap = bitmap,
         contentDescription = null,
         modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .padding(16.dp)
+            //.fillMaxWidth()
+            //.aspectRatio(1f)
+            .padding(5.dp)
+            .height(screenHeight*0.7f),
+        contentScale = ContentScale.Fit
     )
 }
 
@@ -132,7 +127,7 @@ fun FileNameInput(fileName: TextFieldValue, onValueChange: (TextFieldValue) -> U
 fun SaveIcon(context: Context, file: File, fileName: TextFieldValue, navController: NavController) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.padding(2.dp)
     ) {
         IconButton(
             onClick = {

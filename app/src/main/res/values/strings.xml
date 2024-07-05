@@ -3,4 +3,17 @@
     <string name="canvas_screen">Canvas</string>
     <string name="detail_screen">Detail</string>
     <string name="gallery_screen">Squiggle Gallery</string>
+    <string name="drawing_saved">Drawing saved</string>
+    <string name="brushcolor">Brush</string>
+    <string name="color">Color</string>
+    <string name="eraser">Eraser</string>
+    <string name="brushsize">Size</string>
+    <string name="background_color">fond</string>
+    <string name="undo">Undo</string>
+    <string name="unsaved_changes">Unsaved Changes</string>
+    <string name="unsaved_changes_text">You have unsaved changes. Do you want to save them before leaving?</string>
+    <string name="save">Save</string>
+    <string name="discard">Discard</string>
+    <string name="failed_to_save">Failed to save image</string>
+    <string name="saved_to">Saved to</string>
 </resources>

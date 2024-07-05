@@ -30,8 +30,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getString
 import com.example.squiggleheros.composables.PaintView
 import com.example.squiggleheros.composables.SimpleTopAppBarCanvas
+import com.example.squiggleheros.navigation.Screen
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -68,19 +70,21 @@ fun PaintViewComposable(
     )
 }
 
+private const val s = "Drawing saved"
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CanvasScreen(navController: NavController, imagePath: String?) {
     val context = LocalContext.current
     val paintView = remember { PaintView(context) }
     val (currentBrushColor, setCurrentBrushColor) = remember { mutableStateOf(Color.BLACK) }
-    val (currentBrushSize, setCurrentBrushSize) = remember { mutableStateOf(8f) }
-    val (currentEraserSize, setCurrentEraserSize) = remember { mutableStateOf(8f) }
+    val (currentBrushSize, setCurrentBrushSize) = remember { mutableStateOf(32f) }
+    val (currentEraserSize, setCurrentEraserSize) = remember { mutableStateOf(32f) }
     val (isEraserActive, setIsEraserActive) = remember { mutableStateOf(false) }
     val (savedBrushColor, setSavedBrushColor) = remember { mutableStateOf(currentBrushColor) }
     val (savedBrushSize, setSavedBrushSize) = remember { mutableStateOf(currentBrushSize) }
     val (backgroundColor, setBackgroundColor) = remember { mutableStateOf(Color.WHITE) }
-
+    val orange = Color.alpha(4294944000).toInt()
     var showSaveDialog by remember { mutableStateOf(false) }
     var hasUnsavedChanges by remember { mutableStateOf(false) }
     var pendingNavigationRoute by remember { mutableStateOf<String?>(null) }
@@ -89,7 +93,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
     var navigationTarget by remember { mutableStateOf("") }
 
     fun changeBrushSize() {
-        val sizes = listOf(8f, 24f, 32f)
+        val sizes = listOf(16f, 32f, 48f)
         val newSize = sizes[(sizes.indexOf(currentBrushSize) + 1) % sizes.size]
         setCurrentBrushSize(newSize)
         setSavedBrushSize(newSize)
@@ -116,18 +120,18 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
 
     Scaffold(
         topBar = {
-            SimpleTopAppBarCanvas("SquiggleHeros", true, navController,
+            SimpleTopAppBarCanvas(ContextCompat.getString(LocalContext.current, R.string.app_name), true, navController,
                 onSaveClick = {
                     saveDrawing(context, paintView.getBitmap())
                     hasUnsavedChanges = false
-                    Toast.makeText(context, "Drawing saved", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, R.string.drawing_saved, Toast.LENGTH_SHORT).show()
             },
                 onNewDrawingClick = {
                     if (hasUnsavedChanges) {
                         navigationTarget = "canvas"
                         showNewDrawingDialog = true
                     } else {
-                        navController.navigate("canvas_screen")
+                        navController.navigate(Screen.Canvas.route)
                     }
                 },
                 onGalleryClick = {
@@ -135,7 +139,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                         navigationTarget = "gallery"
                         showNewDrawingDialog = true
                     } else {
-                        navController.navigate("gallery_screen")
+                        navController.navigate(Screen.Gallery.route)
                     }
                 }
                 )
@@ -143,11 +147,11 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
-                    label={Text(currentBrushSize.toString())},
+                    label={Text(getString(context, R.string.brushsize))}, //Text(currentBrushSize.toString())},
                     icon = {
                         Icon(
                             painterResource(id = R.drawable.draw),
-                            contentDescription = "Brush",
+                            contentDescription = R.string.brushsize.toString(),
                             Modifier.size(30.dp),
                             tint = colorResource(id = R.color.Orange)
                         )
@@ -161,11 +165,11 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     }
                 )
                 NavigationBarItem(
-                    label = { Text(colorToName(currentBrushColor)) },
+                    label = { Text(getString(context, R.string.brushcolor))},//Text(colorToName(currentBrushColor)) },
                     icon = {
                         Icon(
                             painterResource(id = R.drawable.color_picker),
-                            contentDescription = "Color",
+                            contentDescription = R.string.brushcolor.toString(),
                             Modifier.size(30.dp),
                             tint = androidx.compose.ui.graphics.Color(currentBrushColor)
                         )
@@ -174,18 +178,27 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     onClick = {
                         setIsEraserActive(false)
                         val colors =
-                            listOf(Color.BLACK, Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW)
+                            listOf(
+                                Color.BLACK,
+                                Color.RED,
+                                Color.MAGENTA,
+                                Color.BLUE,
+                                Color.GREEN,
+                                Color.YELLOW,
+                                Color.WHITE,
+                                Color.CYAN
+                            )
                         val newColor = colors[(colors.indexOf(currentBrushColor) + 1) % colors.size]
                         setCurrentBrushColor(newColor)
                         setSavedBrushColor(newColor)
                     }
                 )
                 NavigationBarItem(
-                    label={Text(currentEraserSize.toString())},
+                    label= { Text(getString(context, R.string.eraser))}, //{Text(currentEraserSize.toString())},
                     icon = {
                         Icon(
                             painterResource(id = R.drawable.eraser),
-                            contentDescription = "Eraser",
+                            contentDescription = R.string.eraser.toString(),
                             Modifier.size(30.dp),
                             tint = colorResource(id = R.color.LightPink)
 
@@ -201,11 +214,11 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     }
                 )
                 NavigationBarItem(
-                    label = { Text(colorToName(backgroundColor)) },
+                    label = { Text(getString(context, R.string.background_color))},
                     icon = {
                         Icon(
                             painterResource(id = R.drawable.background),
-                            contentDescription = "Background Color",
+                            contentDescription = getString(context, R.string.background_color),
                             Modifier.size(30.dp),
                             tint = androidx.compose.ui.graphics.Color(backgroundColor)
                         )
@@ -216,10 +229,11 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                             Color.WHITE,
                             Color.LTGRAY,
                             Color.DKGRAY,
-                            Color.YELLOW,
+                            Color.BLUE,
                             Color.CYAN,
                             Color.GREEN,
-                            Color.MAGENTA
+                            Color.MAGENTA,
+                            Color.YELLOW
                         )
                         val newColor = colors[(colors.indexOf(backgroundColor) + 1) % colors.size]
 
@@ -234,11 +248,11 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     }
                 ) // Add undo button
                 NavigationBarItem(
-                    label={Text("Undo")},
+                    label={ Text(getString(context, R.string.undo))},
                     icon = {
                         Icon(
                             painterResource(id = R.drawable.ic_undo),
-                            contentDescription = "Undo",
+                            contentDescription = getString(context, R.string.undo),
                             Modifier.size(30.dp),
                             tint = colorResource(id = R.color.MediumSlateBlue)
                         )
@@ -288,18 +302,18 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                 saveDrawing(context, paintView.getBitmap())
                 hasUnsavedChanges = false
                 if (navigationTarget == "canvas") {
-                    navController.navigate("canvas_screen")
+                    navController.navigate(Screen.Canvas.route)
                 } else if (navigationTarget == "gallery") {
-                    navController.navigate("gallery_screen")
+                    navController.navigate(Screen.Gallery.route)
                 }
                 showNewDrawingDialog = false
             },
             onDiscard = {
                 hasUnsavedChanges = false
                 if (navigationTarget == "canvas") {
-                    navController.navigate("canvas_screen")
+                    navController.navigate(Screen.Canvas.route)
                 } else if (navigationTarget == "gallery") {
-                    navController.navigate("gallery_screen")
+                    navController.navigate(Screen.Gallery.route)
                 }
                 showNewDrawingDialog = false
             },
@@ -312,27 +326,25 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
 
 
 
-
-
-
 @Composable
 fun UnsavedChangesDialog(
     onSave: () -> Unit,
     onDiscard: () -> Unit,
     onCancel: () -> Unit
 ) {
+    val context = LocalContext.current
     AlertDialog(
         onDismissRequest = onCancel,
-        title = { Text("Unsaved Changes") },
-        text = { Text("You have unsaved changes. Do you want to save them before leaving?") },
+        title = { Text(getString(context, R.string.unsaved_changes)) },
+        text = { Text(getString(context, R.string.unsaved_changes_text)) },
         confirmButton = {
             Button(onClick = onSave) {
-                Text("Save")
+                Text(getString(context, R.string.save))
             }
         },
         dismissButton = {
             Button(onClick = onDiscard,) {
-                Text("Discard")
+                Text(getString(context, R.string.discard))
 
             }
         },
@@ -344,15 +356,15 @@ fun saveDrawing(context: Context, bitmap: Bitmap) {
     val directory =
         ContextCompat.getExternalFilesDirs(context, Environment.DIRECTORY_PICTURES)[0]
     val file = File(directory, fileName)
-
+    val message = getString(context, R.string.unsaved_changes)+ file.absolutePath
     try {
         FileOutputStream(file).use { out ->
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-            Toast.makeText(context, "Saved to ${file.absolutePath}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         }
     } catch (e: IOException) {
         e.printStackTrace()
-        Toast.makeText(context, "Failed to save image", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, R.string.failed_to_save, Toast.LENGTH_SHORT).show()
     }
 }
 
