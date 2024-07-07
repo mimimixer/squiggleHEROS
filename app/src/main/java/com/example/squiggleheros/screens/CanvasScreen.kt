@@ -49,7 +49,6 @@ fun PaintViewComposable(
     paintView: PaintView,
     onDrawingChange: () -> Unit
 ) {
-    val context = LocalContext.current
 
     AndroidView(
         factory = { ctx ->
@@ -107,15 +106,6 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
         val newSize = sizes[(sizes.indexOf(currentBrushSize) + 1) % sizes.size]
         setCurrentBrushSize(newSize)
         setSavedBrushSize(newSize)
-    }
-
-    fun handleNavigation(route: String) {
-        if (hasUnsavedChanges) {
-            showSaveDialog = true
-            pendingNavigationRoute = route
-        } else {
-            navController.navigate(route)
-        }
     }
 
     // Load the image if an imagePath is provided
@@ -361,44 +351,3 @@ fun saveDrawing(context: Context, bitmap: Bitmap) {
         Toast.makeText(context, R.string.failed_to_save, Toast.LENGTH_SHORT).show()
     }
 }
-
-fun colorToHexString(color: Int): String {
-    return String.format("#%06X", 0xFFFFFF and color)
-}
-
-fun colorToName(color: Int): String {
-    return when (color) {
-        Color.BLACK -> "Black"
-        Color.WHITE -> "White"
-        Color.RED -> "Red"
-        Color.GREEN -> "Green"
-        Color.BLUE -> "Blue"
-        Color.YELLOW -> "Yellow"
-        Color.CYAN -> "Cyan"
-        Color.MAGENTA -> "Magenta"
-        Color.LTGRAY -> "LtGray"
-        Color.DKGRAY -> "DkGray"
-        else -> colorToHexString(color)  // Return the hex string if the color name is not found
-    }
-}
-
-
-
-/*@Composable
-fun CanvasScreen (navController: NavController){
-
-    Scaffold(
-        topBar = {
-            SimpleTopAppBar(getString(LocalContext.current, R.string.app_name), false, navController)
-        },
-        bottomBar = {
-            SimpleBottomAppBar(navController)
-        }
-    ) { values ->
-        Greeting(
-            name = getString(LocalContext.current, R.string.canvas_screen),
-            paddingValues = values
-        )
-    }
-
-}*/

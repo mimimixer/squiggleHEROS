@@ -16,7 +16,6 @@ import java.nio.charset.StandardCharsets
 @Composable
     fun Navigation(){
         val navController =  rememberNavController()
-        //var moviesViewModel : MoviesViewModel = viewModel()
         NavHost(
             navController = navController,
             startDestination = Screen.Canvas.route
@@ -33,24 +32,6 @@ import java.nio.charset.StandardCharsets
                 println(imagePath)
                 CanvasScreen(navController = navController, imagePath = imagePath)
             }
-
-            /*composable(
-                route = Screen.Detail.route + "/{$DETAIL_SCREEN_KEY}",
-                arguments = listOf(
-                    navArgument(name = DETAIL_SCREEN_KEY) {
-                        type = NavType.StringType
-                    })
-            ) {backStackEntry ->
-                // val movietitle = getMovies()
-                //  .find{ it.id.equals(backStackEntry.arguments?.getString(DETAIL_SCREEN_KEY))}?.title
-                // Log.d("Args", "$movietitle")
-                println("detailscreenkey, also movieID is ${backStackEntry.arguments?.getString(DETAIL_SCREEN_KEY)}")
-                DetailScreen(squiggleID = backStackEntry.arguments?.getString(DETAIL_SCREEN_KEY),
-                    navController = navController
-                )
-                // moviesViewModel = moviesViewModel)
-            }*/
-
             composable(
                 route = Screen.Detail.route,
                 arguments = listOf(

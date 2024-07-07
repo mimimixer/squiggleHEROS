@@ -25,8 +25,6 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.squiggleheros.R
 import com.example.squiggleheros.composables.SimpleAppTopBarDetail
-import com.example.squiggleheros.composables.SimpleBottomAppBar
-import com.example.squiggleheros.composables.SimpleTopAppBar
 import com.example.squiggleheros.navigation.Screen
 import java.io.File
 import java.io.IOException
@@ -44,7 +42,6 @@ fun DetailScreen(navController: NavController, imagePath: String) {
 
     Scaffold(
         topBar = {
-           // SimpleTopAppBar(ContextCompat.getString(LocalContext.current, R.string.app_name), true, navController)
             SimpleAppTopBarDetail(
                 ContextCompat.getString(LocalContext.current, R.string.app_name),
                 showGalleryIcon = true,
@@ -52,9 +49,6 @@ fun DetailScreen(navController: NavController, imagePath: String) {
                 onNewDrawingClick = {navController.navigate(Screen.Canvas.route)},
                 onGalleryClick = {navController.popBackStack() })
         },
-        /*bottomBar = {
-            SimpleBottomAppBar(navController)
-        }*/
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -76,7 +70,6 @@ fun DetailScreen(navController: NavController, imagePath: String) {
             Row(modifier = Modifier
                 .height(140.dp)
                 .fillMaxWidth()
-                //.padding(paddingValues)
                 .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween){
