@@ -29,5 +29,8 @@
     <string name="show_all">Show all</string>
     <string name="show_favorites">Show Favourites</string>
     <string name="delete_drawing">Delete Drawing</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

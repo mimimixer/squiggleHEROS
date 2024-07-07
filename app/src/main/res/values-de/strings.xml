@@ -29,4 +29,7 @@
     <string name="show_all">Zeige alles</string>
     <string name="show_favorites">Zeige die Favouriten</string>
     <string name="delete_drawing">Lösche die Zeichnung</string>
+    <string name="delete">Löschen</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="cancel">Abbrechen</string>
 </resources>

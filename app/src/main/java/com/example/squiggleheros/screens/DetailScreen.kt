@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import com.example.squiggleheros.R
 import com.example.squiggleheros.composables.SimpleBottomAppBar
 import com.example.squiggleheros.composables.SimpleTopAppBar
+import com.example.squiggleheros.navigation.Screen
 import java.io.File
 import java.io.IOException
 import java.io.OutputStream
@@ -137,7 +138,7 @@ fun SaveIcon(context: Context, file: File, fileName: TextFieldValue, navControll
                     val text = R.string.file_renamed
                     Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                     navController.popBackStack()
-                    navController.navigate("gallery_screen")
+                    navController.navigate(Screen.Gallery.route)
                 } else {
                     val text = R.string.failed_to_rename
                     Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
@@ -150,7 +151,7 @@ fun SaveIcon(context: Context, file: File, fileName: TextFieldValue, navControll
                 tint = colorResource(id = R.color.HotPink)
             )
         }
-        Text(text = "Save")
+        Text(text = ContextCompat.getString(LocalContext.current, R.string.save))
     }
 }
 
@@ -170,7 +171,7 @@ fun DeleteIcon(onClick: () -> Unit) {
                 tint = colorResource(id = R.color.CornflowerBlue)
             )
         }
-        Text(text = "Delete")
+        Text(text = ContextCompat.getString(LocalContext.current, R.string.delete))
     }
 }
 
@@ -192,7 +193,7 @@ fun EditIcon(navController: NavController, filePath: String) {
                 tint = colorResource(id = R.color.Orange)
             )
         }
-        Text(text = "Edit")
+        Text(text = ContextCompat.getString(LocalContext.current, R.string.edit))
     }
 }
 
@@ -205,7 +206,7 @@ fun DeleteDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Delete Image") },
+        title = { Text(ContextCompat.getString(LocalContext.current, R.string.delete_drawing)) },
         text = {ContextCompat.getString(LocalContext.current, R.string.delete_ask) },
         confirmButton = {
             Button(
@@ -222,7 +223,7 @@ fun DeleteDialog(
                 },
                 colors = ButtonDefaults.buttonColors(colorResource(id = R.color.Tulip_Pink))
             ) {
-                Text("Delete")
+                Text(ContextCompat.getString(LocalContext.current, R.string.delete))
             }
         },
         dismissButton = {
@@ -230,7 +231,7 @@ fun DeleteDialog(
                 onClick = onDismiss,
                 colors = ButtonDefaults.buttonColors(colorResource(id = R.color.purple_200))
             ) {
-                Text("Cancel")
+                Text(ContextCompat.getString(LocalContext.current, R.string.cancel))
             }
         }
     )
