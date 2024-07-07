@@ -49,10 +49,9 @@ fun PaintViewComposable(
     paintView: PaintView,
     onDrawingChange: () -> Unit
 ) {
-    val context = LocalContext.current
 
     AndroidView(
-        factory = { ctx ->
+        factory = {
             paintView.apply {
                 this.brushColor = brushColor
                 this.brushSize = brushSize
@@ -146,6 +145,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
         },
         bottomBar = {
             NavigationBar {
+                //brushsizechange
                 NavigationBarItem(
                     label={Text(getString(context, R.string.brushsize))}, //Text(currentBrushSize.toString())},
                     icon = {
@@ -164,6 +164,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                         changeBrushSize()
                     }
                 )
+                //brush color change
                 NavigationBarItem(
                     label = { Text(getString(context, R.string.brushcolor))},//Text(colorToName(currentBrushColor)) },
                     icon = {
@@ -193,6 +194,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                         setSavedBrushColor(newColor)
                     }
                 )
+                //eraser
                 NavigationBarItem(
                     label= { Text(getString(context, R.string.eraser))}, //{Text(currentEraserSize.toString())},
                     icon = {
@@ -213,6 +215,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                         setSavedBrushColor(currentBrushColor)
                     }
                 )
+                //change background color
                 NavigationBarItem(
                     label = { Text(getString(context, R.string.background_color))},
                     icon = {
@@ -247,7 +250,8 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                         setBackgroundColor(newColor)
                         paintView.setBackgroundColor(newColor)
                     }
-                ) // Add undo button
+                )
+                //undo button
                 NavigationBarItem(
                     label={ Text(getString(context, R.string.undo))},
                     icon = {
