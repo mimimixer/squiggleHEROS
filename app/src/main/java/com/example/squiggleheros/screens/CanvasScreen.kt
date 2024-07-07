@@ -305,6 +305,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                 hasUnsavedChanges = false
                 if (navigationTarget == "canvas") {
                     navController.navigate(Screen.Canvas.route)
+                    //navController.re
                 } else if (navigationTarget == "gallery") {
                     navController.navigate(Screen.Gallery.route)
                 }

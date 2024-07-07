@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.squiggleheros.R
+import com.example.squiggleheros.composables.SimpleAppTopBarGallery
 import com.example.squiggleheros.composables.SimpleTopAppBar
 import com.example.squiggleheros.navigation.DETAIL_SCREEN_KEY
 import com.example.squiggleheros.navigation.Screen
@@ -45,7 +46,15 @@ fun GalleryScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            SimpleTopAppBar(ContextCompat.getString(LocalContext.current, R.string.app_name), true, navController)
+            //SimpleTopAppBar(ContextCompat.getString(LocalContext.current, R.string.app_name), true, navController)
+                 SimpleAppTopBarGallery(
+                     title = ContextCompat.getString(LocalContext.current, R.string.app_name),
+                     showGalleryIcon = false,
+                     navController = navController,
+                     onNewDrawingClick = { navController.navigate(Screen.Canvas.route) },
+                     onFilterFavoritesClick = { showFavoritesOnly = !showFavoritesOnly },
+                     showFavoritesOnly = showFavoritesOnly
+                 )
         },
     ) { paddingValues ->
         Column(
@@ -53,7 +62,7 @@ fun GalleryScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Row(
+            /*Row(
                 Modifier
                     .clickable { showFavoritesOnly = !showFavoritesOnly }
                     //onClick = ,
@@ -68,7 +77,7 @@ fun GalleryScreen(navController: NavController) {
             ) {
                 Text(if (showFavoritesOnly) ContextCompat.getString(LocalContext.current, R.string.show_all)
                 else ContextCompat.getString(LocalContext.current, R.string.show_gallery), Modifier.height(25.dp))
-            }
+            }*/
 
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 128.dp),
@@ -100,43 +109,33 @@ fun GalleryScreen(navController: NavController) {
                             contentDescription = null,
                             modifier = Modifier.fillMaxSize()
                         )
-                        /*IconButton(
-                            onClick = { imageToDelete = imageFile; showDialog = true },
-                            modifier = Modifier
-                                .align(Alignment.TopEnd)
-                                .size(24.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_delete),
-                                contentDescription = "Delete",
-                                tint = Color.Red
-                            )
-                        }*/
-                        IconButton(
-                            onClick = {
-                                if (imageFile.absolutePath in favorites) {
-                                    favorites = favorites - imageFile.absolutePath
-                                } else {
-                                    favorites = favorites + imageFile.absolutePath
-                                }
-                                PreferenceManager.saveFavorites(context, favorites)
-                            },
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .size(24.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = if (imageFile.absolutePath in favorites) R.drawable.ic_favorite else R.drawable.ic_favorite_border),
-                                contentDescription = "Favorite",
-                                tint = colorResource(id = R.color.Bean_Red)
-                            )
+                        if (!showFavoritesOnly) {
+                            IconButton(
+                                onClick = {
+                                    if (imageFile.absolutePath in favorites) {
+                                        favorites = favorites - imageFile.absolutePath
+                                    } else {
+                                        favorites = favorites + imageFile.absolutePath
+                                    }
+                                    PreferenceManager.saveFavorites(context, favorites)
+                                },
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .size(24.dp)
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = if (imageFile.absolutePath in favorites) R.drawable.ic_favorite else R.drawable.ic_favorite_border),
+                                    contentDescription = "Favorite",
+                                    tint = colorResource(id = R.color.Bean_Red)
+                                )
+                            }
                         }
                     }
                 }
             }
         }
 
-        if (showDialog && imageToDelete != null) {
+        /*if (showDialog && imageToDelete != null) {
             DeleteConfirmationDialog(
                 context = context,
                 imageToDelete = imageToDelete!!,
@@ -147,11 +146,11 @@ fun GalleryScreen(navController: NavController) {
                     showDialog = false
                 }
             )
-        }
+        }*/
     }
 }
 
-@Composable
+/*@Composable
 fun DeleteConfirmationDialog(
     context: Context,
     imageToDelete: File,
@@ -183,12 +182,6 @@ fun DeleteConfirmationDialog(
         }
     )
 }
-
-fun loadImagesFromDirectory(context: Context): List<File> {
-    val directory = ContextCompat.getExternalFilesDirs(context, Environment.DIRECTORY_PICTURES)[0]
-    return directory.listFiles()?.filter { it.isFile && it.extension == "png" } ?: emptyList()
-}
-
 fun deleteImage(context: Context, file: File) {
     if (file.delete()) {
         val text = R.string.drawing_deleted
@@ -198,3 +191,12 @@ fun deleteImage(context: Context, file: File) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 }
+
+*/
+
+fun loadImagesFromDirectory(context: Context): List<File> {
+    val directory = ContextCompat.getExternalFilesDirs(context, Environment.DIRECTORY_PICTURES)[0]
+    return directory.listFiles()?.filter { it.isFile && it.extension == "png" } ?: emptyList()
+}
+
+

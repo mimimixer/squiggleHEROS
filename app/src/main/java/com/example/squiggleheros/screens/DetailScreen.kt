@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.squiggleheros.R
+import com.example.squiggleheros.composables.SimpleAppTopBarDetail
 import com.example.squiggleheros.composables.SimpleBottomAppBar
 import com.example.squiggleheros.composables.SimpleTopAppBar
 import com.example.squiggleheros.navigation.Screen
@@ -43,11 +44,17 @@ fun DetailScreen(navController: NavController, imagePath: String) {
 
     Scaffold(
         topBar = {
-            SimpleTopAppBar(ContextCompat.getString(LocalContext.current, R.string.app_name), true, navController)
+           // SimpleTopAppBar(ContextCompat.getString(LocalContext.current, R.string.app_name), true, navController)
+            SimpleAppTopBarDetail(
+                ContextCompat.getString(LocalContext.current, R.string.app_name),
+                showGalleryIcon = true,
+                navController = navController,
+                onNewDrawingClick = {navController.navigate(Screen.Canvas.route)},
+                onGalleryClick = {navController.popBackStack() })
         },
-        bottomBar = {
+        /*bottomBar = {
             SimpleBottomAppBar(navController)
-        }
+        }*/
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -109,7 +116,7 @@ fun DisplayImage(bitmap: androidx.compose.ui.graphics.ImageBitmap) {
             //.fillMaxWidth()
             //.aspectRatio(1f)
             .padding(5.dp)
-            .height(screenHeight*0.7f),
+            .height(screenHeight * 0.7f),
         contentScale = ContentScale.Fit
     )
 }

@@ -112,6 +112,70 @@ fun SimpleTopAppBarCanvas(title: String, showGalleryIcon: Boolean, navController
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SimpleAppTopBarDetail(title: String, showGalleryIcon: Boolean, navController: NavController,
+                          onNewDrawingClick: ()-> Unit, onGalleryClick: ()->Unit){
+    TopAppBar(
+        title = { Text(text = title) },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = colorResource(id = R.color.Azure),
+            titleContentColor = colorResource(id = R.color.Cornflower_Blue)),
+        actions = {
+            IconButton(onClick = onNewDrawingClick) {
+                Icon(
+                    painterResource(id = R.drawable.renew),
+                    contentDescription = "New Drawing",
+                    Modifier.size(30.dp),
+                    tint = colorResource(id = R.color.CornflowerBlue)
+
+                )
+            }
+            Spacer(modifier = Modifier.width(16.dp)) // Add spacing between icons
+            IconButton(onClick = onGalleryClick) {//{ navController.navigate(Screen.Gallery.route) }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.gallery),
+                    contentDescription = "Gallery",
+                    Modifier.size(30.dp),
+                    tint = colorResource(id = R.color.MediumSeaGreen)
+                )
+            }
+        }
+    )
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SimpleAppTopBarGallery(title: String, showGalleryIcon: Boolean, navController: NavController,
+                          onNewDrawingClick: ()-> Unit, onFilterFavoritesClick: ()->Unit , showFavoritesOnly: Boolean){
+    TopAppBar(
+        title = { Text(text = title) },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = colorResource(id = R.color.Azure),
+            titleContentColor = colorResource(id = R.color.Cornflower_Blue)),
+        actions = {
+            IconButton(onClick = onNewDrawingClick) {
+                Icon(
+                    painterResource(id = R.drawable.renew),
+                    contentDescription = "New Drawing",
+                    Modifier.size(30.dp),
+                    tint = colorResource(id = R.color.CornflowerBlue)
+
+                )
+            }
+            Spacer(modifier = Modifier.width(16.dp)) // Add spacing between icons
+            IconButton(onClick = onFilterFavoritesClick) {
+                Icon(
+                    painter = painterResource(id = if (showFavoritesOnly) R.drawable.ic_favorite else R.drawable.ic_favorite_border),
+                    contentDescription = "Filter Favorites",
+                    Modifier.size(30.dp)
+                )
+            }
+        }
+    )
+
+}
 
 
 @Composable
