@@ -227,7 +227,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     label = { Text(getString(context, R.string.background_color)) },
                     icon = {
                         Icon(
-                            painterResource(id = R.drawable.background),
+                            painterResource(id = R.drawable.baseline_format_paint_24), //background),
                             contentDescription = getString(context, R.string.background_color),
                             Modifier.size(30.dp),
                             tint = androidx.compose.ui.graphics.Color(backgroundColor)
