@@ -9,6 +9,7 @@ import android.os.Environment
 import android.widget.Toast
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -70,7 +71,6 @@ fun PaintViewComposable(
     )
 }
 
-private const val s = "Drawing saved"
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -78,8 +78,8 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
     val context = LocalContext.current
     val paintView = remember { PaintView(context) }
     val (currentBrushColor, setCurrentBrushColor) = remember { mutableStateOf(Color.BLACK) }
-    val (currentBrushSize, setCurrentBrushSize) = remember { mutableStateOf(32f) }
-    val (currentEraserSize, setCurrentEraserSize) = remember { mutableStateOf(32f) }
+    val (currentBrushSize, setCurrentBrushSize) = remember { mutableStateOf(24f) }
+    val (currentEraserSize, setCurrentEraserSize) = remember { mutableStateOf(24f) }
     val (isEraserActive, setIsEraserActive) = remember { mutableStateOf(false) }
     val (savedBrushColor, setSavedBrushColor) = remember { mutableStateOf(currentBrushColor) }
     val (savedBrushSize, setSavedBrushSize) = remember { mutableStateOf(currentBrushSize) }
@@ -153,7 +153,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                             painterResource(id = R.drawable.draw),
                             contentDescription = R.string.brushsize.toString(),
                             Modifier.size(30.dp),
-                            tint = colorResource(id = R.color.Orange)
+                            tint = androidx.compose.ui.graphics.Color(currentBrushColor) //colorResource(id = R.color.Orange)
                         )
                     },
                     selected = !isEraserActive,
@@ -200,14 +200,14 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                             painterResource(id = R.drawable.eraser),
                             contentDescription = R.string.eraser.toString(),
                             Modifier.size(30.dp),
-                            tint = colorResource(id = R.color.LightPink)
+                            tint = androidx.compose.ui.graphics.Color(backgroundColor)
 
                         )
                     },
                     selected = isEraserActive,
                     onClick = {
                         setIsEraserActive(true)
-                        val sizes = listOf(8f, 24f, 30f)
+                        val sizes = listOf(24f, 48f, 8f)
                         setCurrentEraserSize(sizes[(sizes.indexOf(currentEraserSize) + 1) % sizes.size])
                         setSavedBrushSize(currentBrushSize)
                         setSavedBrushColor(currentBrushColor)
@@ -337,8 +337,8 @@ fun UnsavedChangesDialog(
     val context = LocalContext.current
     AlertDialog(
         onDismissRequest = onCancel,
-        title = { Text(getString(context, R.string.unsaved_changes)) },
-        text = { Text(getString(context, R.string.unsaved_changes_text)) },
+        title = { Text(getString(context, R.string.save)) },
+        text = { Text(getString(context, R.string.unsaved_changes_text))},
         confirmButton = {
             Button(onClick = onSave) {
                 Text(getString(context, R.string.save))
@@ -350,7 +350,9 @@ fun UnsavedChangesDialog(
 
             }
         },
-        containerColor = colorResource(id = R.color.PowderBlue)
+        containerColor = colorResource(id = R.color.PowderBlue),
+        titleContentColor = colorResource(id = R.color.DarkBlue),
+        textContentColor = colorResource(id = R.color.Blue)
     )
 }
 fun saveDrawing(context: Context, bitmap: Bitmap) {

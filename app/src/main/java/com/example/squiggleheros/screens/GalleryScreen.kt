@@ -67,7 +67,7 @@ fun GalleryScreen(navController: NavController) {
 
             ) {
                 Text(if (showFavoritesOnly) ContextCompat.getString(LocalContext.current, R.string.show_all)
-                else ContextCompat.getString(LocalContext.current, R.string.show_favorites), Modifier.height(25.dp))
+                else ContextCompat.getString(LocalContext.current, R.string.show_gallery), Modifier.height(25.dp))
             }
 
             LazyVerticalGrid(
@@ -177,7 +177,8 @@ fun DeleteConfirmationDialog(
             Button(
                 onClick = onDismiss
             ) {
-                Text("Cancel")
+                Text(ContextCompat.getString(LocalContext.current, R.string.cancel) ,
+                )
             }
         }
     )

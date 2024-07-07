@@ -223,7 +223,7 @@ fun DeleteDialog(
                 },
                 colors = ButtonDefaults.buttonColors(colorResource(id = R.color.Tulip_Pink))
             ) {
-                Text(ContextCompat.getString(LocalContext.current, R.string.delete))
+                Text(ContextCompat.getString(LocalContext.current, R.string.delete ))
             }
         },
         dismissButton = {
