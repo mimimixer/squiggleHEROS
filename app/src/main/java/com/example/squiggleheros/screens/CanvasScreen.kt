@@ -87,8 +87,8 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
     val context = LocalContext.current
     val paintView = remember { PaintView(context) }
     val (currentBrushColor, setCurrentBrushColor) = remember { mutableStateOf(Color.BLACK) }
-    val (currentBrushSize, setCurrentBrushSize) = remember { mutableStateOf(32f) }
-    val (currentEraserSize, setCurrentEraserSize) = remember { mutableStateOf(32f) }
+    val (currentBrushSize, setCurrentBrushSize) = remember { mutableStateOf(16f) }
+    val (currentEraserSize, setCurrentEraserSize) = remember { mutableStateOf(16f) }
     val (isEraserActive, setIsEraserActive) = remember { mutableStateOf(false) }
     val (savedBrushColor, setSavedBrushColor) = remember { mutableStateOf(currentBrushColor) }
     val (savedBrushSize, setSavedBrushSize) = remember { mutableStateOf(currentBrushSize) }
