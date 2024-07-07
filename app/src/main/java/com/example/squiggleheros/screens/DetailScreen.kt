@@ -241,7 +241,7 @@ fun saveImageToGallery(context: Context, file: File) {
     val values = ContentValues().apply {
         put(MediaStore.Images.Media.DISPLAY_NAME, file.name)
         put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-        put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/SquiggleHEROS")
     }
 
     val resolver = context.contentResolver
