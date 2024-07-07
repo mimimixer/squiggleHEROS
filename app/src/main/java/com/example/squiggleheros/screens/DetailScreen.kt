@@ -24,8 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.squiggleheros.R
-import com.example.squiggleheros.composables.SimpleBottomAppBar
-import com.example.squiggleheros.composables.SimpleTopAppBar
+import com.example.squiggleheros.composables.SimpleAppTopBarDetail
 import com.example.squiggleheros.navigation.Screen
 import java.io.File
 import java.io.IOException
@@ -43,11 +42,13 @@ fun DetailScreen(navController: NavController, imagePath: String) {
 
     Scaffold(
         topBar = {
-            SimpleTopAppBar(ContextCompat.getString(LocalContext.current, R.string.app_name), true, navController)
+            SimpleAppTopBarDetail(
+                ContextCompat.getString(LocalContext.current, R.string.app_name),
+                showGalleryIcon = true,
+                navController = navController,
+                onNewDrawingClick = {navController.navigate(Screen.Canvas.route)},
+                onGalleryClick = {navController.popBackStack() })
         },
-        bottomBar = {
-            SimpleBottomAppBar(navController)
-        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -69,7 +70,6 @@ fun DetailScreen(navController: NavController, imagePath: String) {
             Row(modifier = Modifier
                 .height(140.dp)
                 .fillMaxWidth()
-                //.padding(paddingValues)
                 .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween){
@@ -109,7 +109,7 @@ fun DisplayImage(bitmap: androidx.compose.ui.graphics.ImageBitmap) {
             //.fillMaxWidth()
             //.aspectRatio(1f)
             .padding(5.dp)
-            .height(screenHeight*0.7f),
+            .height(screenHeight * 0.7f),
         contentScale = ContentScale.Fit
     )
 }
@@ -241,7 +241,7 @@ fun saveImageToGallery(context: Context, file: File) {
     val values = ContentValues().apply {
         put(MediaStore.Images.Media.DISPLAY_NAME, file.name)
         put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-        put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+        put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/SquiggleHEROS")
     }
 
     val resolver = context.contentResolver

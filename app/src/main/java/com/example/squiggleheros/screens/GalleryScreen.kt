@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.squiggleheros.R
-import com.example.squiggleheros.composables.SimpleTopAppBar
+import com.example.squiggleheros.composables.SimpleAppTopBarGallery
 import com.example.squiggleheros.navigation.DETAIL_SCREEN_KEY
 import com.example.squiggleheros.navigation.Screen
 import com.example.squiggleheros.utils.PreferenceManager
@@ -40,12 +40,17 @@ fun GalleryScreen(navController: NavController) {
     // Load favorite states from SharedPreferences
     var favorites by remember { mutableStateOf(PreferenceManager.loadFavorites(context)) }
     var showFavoritesOnly by remember { mutableStateOf(false) }
-    var imageToDelete by remember { mutableStateOf<File?>(null) }
-    var showDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
-            SimpleTopAppBar(ContextCompat.getString(LocalContext.current, R.string.app_name), true, navController)
+                 SimpleAppTopBarGallery(
+                     title = ContextCompat.getString(LocalContext.current, R.string.app_name),
+                     showGalleryIcon = false,
+                     navController = navController,
+                     onNewDrawingClick = { navController.navigate(Screen.Canvas.route) },
+                     onFilterFavoritesClick = { showFavoritesOnly = !showFavoritesOnly },
+                     showFavoritesOnly = showFavoritesOnly
+                 )
         },
     ) { paddingValues ->
         Column(
@@ -53,23 +58,6 @@ fun GalleryScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            Row(
-                Modifier
-                    .clickable { showFavoritesOnly = !showFavoritesOnly }
-                    //onClick = ,
-                    .align(Alignment.CenterHorizontally)
-
-                    .background(colorResource(id = R.color.Blossom_Pink))
-                    .fillMaxWidth()
-                    .height(30.dp),
-                horizontalArrangement =Arrangement.Center,
-                verticalAlignment =Alignment.CenterVertically
-
-            ) {
-                Text(if (showFavoritesOnly) ContextCompat.getString(LocalContext.current, R.string.show_all)
-                else ContextCompat.getString(LocalContext.current, R.string.show_gallery), Modifier.height(25.dp))
-            }
-
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 128.dp),
                 contentPadding = PaddingValues(8.dp)
@@ -100,88 +88,32 @@ fun GalleryScreen(navController: NavController) {
                             contentDescription = null,
                             modifier = Modifier.fillMaxSize()
                         )
-                        /*IconButton(
-                            onClick = { imageToDelete = imageFile; showDialog = true },
-                            modifier = Modifier
-                                .align(Alignment.TopEnd)
-                                .size(24.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_delete),
-                                contentDescription = "Delete",
-                                tint = Color.Red
-                            )
-                        }*/
-                        IconButton(
-                            onClick = {
-                                if (imageFile.absolutePath in favorites) {
-                                    favorites = favorites - imageFile.absolutePath
-                                } else {
-                                    favorites = favorites + imageFile.absolutePath
-                                }
-                                PreferenceManager.saveFavorites(context, favorites)
-                            },
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .size(24.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = if (imageFile.absolutePath in favorites) R.drawable.ic_favorite else R.drawable.ic_favorite_border),
-                                contentDescription = "Favorite",
-                                tint = colorResource(id = R.color.Bean_Red)
-                            )
+                        if (!showFavoritesOnly) {
+                            IconButton(
+                                onClick = {
+                                    if (imageFile.absolutePath in favorites) {
+                                        favorites = favorites - imageFile.absolutePath
+                                    } else {
+                                        favorites = favorites + imageFile.absolutePath
+                                    }
+                                    PreferenceManager.saveFavorites(context, favorites)
+                                },
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .size(24.dp)
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = if (imageFile.absolutePath in favorites) R.drawable.ic_favorite else R.drawable.ic_favorite_border),
+                                    contentDescription = "Favorite",
+                                    tint = colorResource(id = R.color.Bean_Red)
+                                )
+                            }
                         }
                     }
                 }
             }
         }
-
-        if (showDialog && imageToDelete != null) {
-            DeleteConfirmationDialog(
-                context = context,
-                imageToDelete = imageToDelete!!,
-                onDismiss = { showDialog = false },
-                onDeleteConfirmed = {
-                    deleteImage(context, imageToDelete!!)
-                    images = loadImagesFromDirectory(context)
-                    showDialog = false
-                }
-            )
-        }
     }
-}
-
-@Composable
-fun DeleteConfirmationDialog(
-    context: Context,
-    imageToDelete: File,
-    onDismiss: () -> Unit,
-    onDeleteConfirmed: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(text = ContextCompat.getString(LocalContext.current, R.string.delete_drawing)) },
-        text = { Text(text = ContextCompat.getString(LocalContext.current, R.string.delete_ask)) },
-        confirmButton = {
-            Button(
-                onClick = {
-                    deleteImage(context, imageToDelete)
-                    onDeleteConfirmed()
-                },
-                colors = ButtonDefaults.buttonColors(Color.Red)
-            ) {
-                Text("Delete")
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = onDismiss
-            ) {
-                Text(ContextCompat.getString(LocalContext.current, R.string.cancel) ,
-                )
-            }
-        }
-    )
 }
 
 fun loadImagesFromDirectory(context: Context): List<File> {
@@ -189,12 +121,4 @@ fun loadImagesFromDirectory(context: Context): List<File> {
     return directory.listFiles()?.filter { it.isFile && it.extension == "png" } ?: emptyList()
 }
 
-fun deleteImage(context: Context, file: File) {
-    if (file.delete()) {
-        val text = R.string.drawing_deleted
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
-    } else {
-        val text = R.string.failed_to_delete
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
-    }
-}
+

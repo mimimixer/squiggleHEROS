@@ -31,29 +31,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.secondary
                 ) {
-                    //deleteDatabase(MovieDatabase.movie_db)
                     Navigation()
                 }
             }
         }
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    }
-}
-
-@Composable
-fun Greeting(name: String, paddingValues: PaddingValues) {
-    Text(
-        text = "Hello $name!",
-        modifier = Modifier.padding(paddingValues)
-    )
-}
-
-//@Preview(showBackground = true)
-
-val paddingVals = PaddingValues(16.dp)
-@Composable
-fun GreetingPreview() {
-    SquiggleHEROSTheme {
-        Greeting("Android", paddingVals )
     }
 }

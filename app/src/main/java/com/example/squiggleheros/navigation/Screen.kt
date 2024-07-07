@@ -36,8 +36,3 @@ sealed class Screen (
     )
 
 }
-
-val bottomNavigationIcons = listOf(
-    Screen.Canvas,
-    Screen.Gallery
-)
