@@ -61,7 +61,7 @@ fun DetailScreen(navController: NavController, imagePath: String) {
                 bitmap?.let {
                     DisplayImage(it.asImageBitmap())
                 } ?: run {
-                    Text(text = "Image not found", color = MaterialTheme.colorScheme.error)
+                    Text(ContextCompat.getString(LocalContext.current, R.string.drawing_not_found), color = MaterialTheme.colorScheme.error)
                 }
             }
             FileNameInput(fileName) { fileName = it }
@@ -118,7 +118,7 @@ fun FileNameInput(fileName: TextFieldValue, onValueChange: (TextFieldValue) -> U
     OutlinedTextField(
         value = fileName,
         onValueChange = onValueChange,
-        label = { Text("Filename") },
+        label = {ContextCompat.getString(LocalContext.current, R.string.filename) },
         modifier = Modifier.fillMaxWidth()
     )
 }
@@ -134,11 +134,13 @@ fun SaveIcon(context: Context, file: File, fileName: TextFieldValue, navControll
                 val newFile = File(file.parent, "${fileName.text}.${file.extension}")
                 if (file.renameTo(newFile)) {
                     saveImageToGallery(context, newFile)
-                    Toast.makeText(context, "File renamed and saved to gallery", Toast.LENGTH_SHORT).show()
+                    val text = R.string.file_renamed
+                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                     navController.popBackStack()
                     navController.navigate("gallery_screen")
                 } else {
-                    Toast.makeText(context, "Failed to rename file", Toast.LENGTH_SHORT).show()
+                    val text = R.string.failed_to_rename
+                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                 }
             }
         ) {
@@ -204,15 +206,17 @@ fun DeleteDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Delete Image") },
-        text = { Text("Are you sure you want to delete this image?") },
+        text = {ContextCompat.getString(LocalContext.current, R.string.delete_ask) },
         confirmButton = {
             Button(
                 onClick = {
                     if (file.exists() && file.delete()) {
-                        Toast.makeText(context, "Image deleted", Toast.LENGTH_SHORT).show()
+                        val text = R.string.drawing_deleted
+                        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                         onDeleteConfirmed()
                     } else {
-                        Toast.makeText(context, "Failed to delete image", Toast.LENGTH_SHORT).show()
+                        val text = R.string.failed_to_delete
+                        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                     }
                     onDismiss()
                 },
@@ -249,10 +253,12 @@ fun saveImageToGallery(context: Context, file: File) {
                 val bitmap = BitmapFactory.decodeFile(file.absolutePath)
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
             }
-            Toast.makeText(context, "Image saved to gallery", Toast.LENGTH_SHORT).show()
+            val text = R.string.drawing_saved_to_gallery
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
         } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(context, "Failed to save image to gallery", Toast.LENGTH_SHORT).show()
+            val text = R.string.failed_to_save
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
         }
     }
 }

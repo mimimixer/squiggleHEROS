@@ -1,19 +1,33 @@
 <resources>
-    <string name="app_name">squiggleHEROS</string>
+    <string name="app_name" translatable="false">squiggleHEROS</string>
     <string name="canvas_screen">Canvas</string>
     <string name="detail_screen">Detail</string>
     <string name="gallery_screen">Squiggle Gallery</string>
-    <string name="drawing_saved">Drawing saved</string>
     <string name="brushcolor">Brush</string>
     <string name="color">Color</string>
     <string name="eraser">Eraser</string>
     <string name="brushsize">Size</string>
     <string name="background_color">fond</string>
+    <string name="filename">Filename</string>
     <string name="undo">Undo</string>
-    <string name="unsaved_changes">Unsaved Changes</string>
-    <string name="unsaved_changes_text">You have unsaved changes. Do you want to save them before leaving?</string>
-    <string name="save">Save</string>
+    <string name="undo_last">Undo last action</string>
     <string name="discard">Discard</string>
-    <string name="failed_to_save">Failed to save image</string>
+    <string name="save">Save</string>
+    <string name="drawing_saved">Drawing saved</string>
+    <string name="drawing_saved_to_gallery">Drawing saved to gallery</string>
+    <string name="drawing_deleted">Drawing deleted</string>
     <string name="saved_to">Saved to</string>
+    <string name="unsaved_changes">Unsaved Changes</string>
+    <string name="drawing_not_found">Drawing not found</string>
+    <string name="failed_to_save">Failed to save drawing</string>
+    <string name="failed_to_rename">Failed to rename file</string>
+    <string name="failed_to_delete">Failed to delete drawing</string>
+    <string name="file_renamed">File renamed and saved to gallery</string>
+    <string name="brushcolor_changed">Brush color changed to avoid conflict with background color</string>
+    <string name="unsaved_changes_text">You have unsaved changes. Do you want to save them before leaving?</string>
+    <string name="delete_ask">Are you sure you want to delete this image?</string>
+    <string name="show_all">Show all</string>
+    <string name="show_favorites">Show Favourites</string>
+    <string name="delete_drawing">Delete Drawing</string>
+
 </resources>

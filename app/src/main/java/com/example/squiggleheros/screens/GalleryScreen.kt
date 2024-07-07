@@ -66,7 +66,8 @@ fun GalleryScreen(navController: NavController) {
                 verticalAlignment =Alignment.CenterVertically
 
             ) {
-                Text(if (showFavoritesOnly) "Show All" else "Show Favorites", Modifier.height(25.dp))
+                Text(if (showFavoritesOnly) ContextCompat.getString(LocalContext.current, R.string.show_all)
+                else ContextCompat.getString(LocalContext.current, R.string.show_favorites), Modifier.height(25.dp))
             }
 
             LazyVerticalGrid(
@@ -159,8 +160,8 @@ fun DeleteConfirmationDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(text = "Delete Image") },
-        text = { Text(text = "Are you sure you want to delete this image?") },
+        title = { Text(text = ContextCompat.getString(LocalContext.current, R.string.delete_drawing)) },
+        text = { Text(text = ContextCompat.getString(LocalContext.current, R.string.delete_ask)) },
         confirmButton = {
             Button(
                 onClick = {
@@ -189,8 +190,10 @@ fun loadImagesFromDirectory(context: Context): List<File> {
 
 fun deleteImage(context: Context, file: File) {
     if (file.delete()) {
-        Toast.makeText(context, "Image deleted", Toast.LENGTH_SHORT).show()
+        val text = R.string.drawing_deleted
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     } else {
-        Toast.makeText(context, "Failed to delete image", Toast.LENGTH_SHORT).show()
+        val text = R.string.failed_to_delete
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 }

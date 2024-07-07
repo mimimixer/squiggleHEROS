@@ -240,7 +240,8 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                         if (currentBrushColor == newColor) {
                             setCurrentBrushColor(Color.BLACK)
                             setSavedBrushColor(Color.BLACK)
-                            Toast.makeText(context, "Brush color changed to BLACK to avoid conflict with background color", Toast.LENGTH_SHORT).show()
+                            val text = R.string.brushcolor_changed
+                            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                         }
 
                         setBackgroundColor(newColor)
@@ -260,7 +261,8 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     selected = false,
                     onClick = {
                         paintView.undo()
-                        Toast.makeText(context, "Undo last action", Toast.LENGTH_SHORT).show()
+                        val text = R.string.undo_last
+                        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                     }
                 )
             }

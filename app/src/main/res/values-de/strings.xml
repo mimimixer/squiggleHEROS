@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="canvas_screen">Leinwand</string>
+    <string name="detail_screen">Detail</string>
+    <string name="gallery_screen">Squiggle Gallerie</string>
+    <string name="brushcolor">Pinsel</string>
+    <string name="color">Farbe</string>
+    <string name="eraser">Radierer</string>
+    <string name="brushsize">Größe</string>
+    <string name="background_color">fond</string>
+    <string name="filename">Dateiname</string>
+    <string name="undo">Zurück</string>
+    <string name="undo_last">Mache die letzte Handlung rückgängig</string>
+    <string name="discard">Verwerfen</string>
+    <string name="save">Speichern</string>
+    <string name="drawing_saved">Zeichnung gespeichert</string>
+    <string name="drawing_saved_to_gallery">Zeichung in Gallerie gespeichert</string>
+    <string name="drawing_deleted">Zeichnung gelöscht</string>
+    <string name="saved_to">Gespeichert in</string>
+    <string name="unsaved_changes">Ungespeichterte Änderungen</string>
+    <string name="drawing_not_found">Zeichnng nicht gefunden</string>
+    <string name="failed_to_save">Konnte die Zeichnung nicht speichern</string>
+    <string name="failed_to_rename">Konnte die Zeichnung nicht umbenennnen</string>
+    <string name="failed_to_delete">Konnte die Zeichnung nicht löschen</string>
+    <string name="file_renamed">Zeichnung umbenannt und in der Gallerie gespeichert</string>
+    <string name="brushcolor_changed">Farbe des Pinsels geändert damit du auf dem neuen Hintergrund zeichnen kannst</string>
+    <string name="unsaved_changes_text">Du hast ungespeicherte Änderungen. Möchtest du diese speichern bevor du die Seite verlässt?</string>
+    <string name="delete_ask">Bist du sicher, dass du diese Zeichnung löschen willst?</string>
+    <string name="show_all">Zeige alles</string>
+    <string name="show_favorites">Zeige die Favouriten</string>
+    <string name="delete_drawing">Lösche die Zeichnung</string>
+</resources>
