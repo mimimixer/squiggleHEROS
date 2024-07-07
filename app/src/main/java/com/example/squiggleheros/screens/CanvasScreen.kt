@@ -237,13 +237,13 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     onClick = {
                         val colors = listOf(
                             Color.WHITE,
-                            Color.LTGRAY,
-                            Color.DKGRAY,
-                            Color.BLUE,
+                            Color.YELLOW,
                             Color.CYAN,
+                            Color.BLUE,
                             Color.GREEN,
                             Color.MAGENTA,
-                            Color.YELLOW
+                            Color.DKGRAY,
+                            Color.LTGRAY
                         )
                         val newColor = colors[(colors.indexOf(backgroundColor) + 1) % colors.size]
 
