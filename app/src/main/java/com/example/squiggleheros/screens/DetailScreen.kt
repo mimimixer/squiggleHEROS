@@ -35,7 +35,7 @@ import java.nio.charset.StandardCharsets
 fun DetailScreen(navController: NavController, imagePath: String) {
     val context = LocalContext.current
     var file by remember { mutableStateOf(File(imagePath)) }
-    val fileName by remember { mutableStateOf(TextFieldValue(file.name)) }
+    var fileName by remember { mutableStateOf(TextFieldValue(file.name)) }
     val bitmap = BitmapFactory.decodeFile(file.absolutePath)
     var showDeleteDialog by remember { mutableStateOf(false) }
 
@@ -43,8 +43,6 @@ fun DetailScreen(navController: NavController, imagePath: String) {
         topBar = {
             SimpleAppTopBarDetail(
                 ContextCompat.getString(LocalContext.current, R.string.app_name),
-                showGalleryIcon = true,
-                navController = navController,
                 onNewDrawingClick = {navController.navigate(Screen.Canvas.route)},
                 onGalleryClick = {navController.popBackStack() })
         },
@@ -131,7 +129,7 @@ fun SaveIcon(context: Context, file: File, fileName: TextFieldValue, navControll
     ) {
         IconButton(
             onClick = {
-                val newFile = File(file.parent, "${fileName.text}.${file.extension}")
+                val newFile = File(file.parent, "${fileName.text}")//.${file.extension}")
                 if (file.renameTo(newFile)) {
                     saveImageToGallery(context, newFile)
                     val text = R.string.file_renamed

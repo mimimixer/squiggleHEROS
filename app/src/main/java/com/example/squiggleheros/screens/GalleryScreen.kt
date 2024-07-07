@@ -45,8 +45,6 @@ fun GalleryScreen(navController: NavController) {
         topBar = {
                  SimpleAppTopBarGallery(
                      title = ContextCompat.getString(LocalContext.current, R.string.app_name),
-                     showGalleryIcon = false,
-                     navController = navController,
                      onNewDrawingClick = { navController.navigate(Screen.Canvas.route) },
                      onFilterFavoritesClick = { showFavoritesOnly = !showFavoritesOnly },
                      showFavoritesOnly = showFavoritesOnly
@@ -118,7 +116,7 @@ fun GalleryScreen(navController: NavController) {
 
 fun loadImagesFromDirectory(context: Context): List<File> {
     val directory = ContextCompat.getExternalFilesDirs(context, Environment.DIRECTORY_PICTURES)[0]
-    return directory.listFiles()?.filter { it.isFile && it.extension == "png" } ?: emptyList()
+    return directory.listFiles()?.filter { it.isFile} ?: emptyList() //it.isFile && it.extension == "png"
 }
 
 

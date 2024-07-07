@@ -115,7 +115,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
 
     Scaffold(
         topBar = {
-            SimpleTopAppBarCanvas(getString(LocalContext.current, R.string.app_name), true, navController,
+            SimpleTopAppBarCanvas(getString(LocalContext.current, R.string.app_name),
                 onSaveClick = {
                     saveDrawing(context, paintView.getBitmap())
                     hasUnsavedChanges = false
@@ -367,8 +367,7 @@ fun UnsavedChangesDialog(
 }
 fun saveDrawing(context: Context, bitmap: Bitmap) {
     val fileName = "drawing_${UUID.randomUUID()}.png"
-    val directory =
-        ContextCompat.getExternalFilesDirs(context, Environment.DIRECTORY_PICTURES)[0]
+    val directory = ContextCompat.getExternalFilesDirs(context, Environment.DIRECTORY_PICTURES)[0]
     val file = File(directory, fileName)
     val message = getString(context, R.string.unsaved_changes)+ file.absolutePath
     try {
