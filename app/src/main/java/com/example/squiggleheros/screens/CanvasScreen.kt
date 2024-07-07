@@ -90,10 +90,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
     val (currentBrushSize, setCurrentBrushSize) = remember { mutableStateOf(16f) }
     val (currentEraserSize, setCurrentEraserSize) = remember { mutableStateOf(16f) }
     val (isEraserActive, setIsEraserActive) = remember { mutableStateOf(false) }
-    val (savedBrushColor, setSavedBrushColor) = remember { mutableStateOf(currentBrushColor) }
-    val (savedBrushSize, setSavedBrushSize) = remember { mutableStateOf(currentBrushSize) }
     val (backgroundColor, setBackgroundColor) = remember { mutableStateOf(Color.WHITE) }
-    val orange = Color.alpha(4294944000).toInt()
     var showSaveDialog by remember { mutableStateOf(false) }
     var hasUnsavedChanges by remember { mutableStateOf(false) }
     var pendingNavigationRoute by remember { mutableStateOf<String?>(null) }
@@ -105,7 +102,6 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
         val sizes = listOf(16f, 32f, 48f)
         val newSize = sizes[(sizes.indexOf(currentBrushSize) + 1) % sizes.size]
         setCurrentBrushSize(newSize)
-        setSavedBrushSize(newSize)
     }
 
     // Load the image if an imagePath is provided
@@ -157,8 +153,6 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                     selected = !isEraserActive,
                     onClick = {
                         setIsEraserActive(false)
-                        setCurrentBrushColor(savedBrushColor)
-                        setCurrentBrushSize(savedBrushSize)
                         changeBrushSize()
                     }
                 )
@@ -180,7 +174,6 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                         )
                         val newColor = colors[(colors.indexOf(currentBrushColor) + 1) % colors.size]
                         setCurrentBrushColor(newColor)
-                        setSavedBrushColor(newColor)
                     }
                 )
                 NavigationBarItem(
@@ -198,8 +191,6 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                         setIsEraserActive(true)
                         val sizes = listOf(8f, 24f, 30f)
                         setCurrentEraserSize(sizes[(sizes.indexOf(currentEraserSize) + 1) % sizes.size])
-                        setSavedBrushSize(currentBrushSize)
-                        setSavedBrushColor(currentBrushColor)
                     }
                 )
                 NavigationBarItem(
@@ -221,7 +212,6 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
 
                         if (currentBrushColor == newColor) {
                             setCurrentBrushColor(Color.BLACK)
-                            setSavedBrushColor(Color.BLACK)
                             val text = R.string.brushcolor_changed
                             Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                         }
