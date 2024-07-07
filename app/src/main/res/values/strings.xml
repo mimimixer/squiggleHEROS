@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">squiggleHEROES</string>
+    <string name="app_name" translatable="false">squiggleHERO</string>
     <string name="canvas_screen">Canvas</string>
     <string name="detail_screen">Detail</string>
     <string name="gallery_screen">Squiggle Gallery</string>
