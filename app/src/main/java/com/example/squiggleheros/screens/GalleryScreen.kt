@@ -3,9 +3,7 @@ package com.example.squiggleheros.screens
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Environment
-import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -15,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -35,7 +32,7 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun GalleryScreen(navController: NavController) {
     val context = LocalContext.current
-    var images by remember { mutableStateOf(loadImagesFromDirectory(context)) }
+    val images by remember { mutableStateOf(loadImagesFromDirectory(context)) }
 
     // Load favorite states from SharedPreferences
     var favorites by remember { mutableStateOf(PreferenceManager.loadFavorites(context)) }

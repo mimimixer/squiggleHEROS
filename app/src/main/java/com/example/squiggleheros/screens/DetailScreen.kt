@@ -34,7 +34,7 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun DetailScreen(navController: NavController, imagePath: String) {
     val context = LocalContext.current
-    var file by remember { mutableStateOf(File(imagePath)) }
+    val file by remember { mutableStateOf(File(imagePath)) }
     var fileName by remember { mutableStateOf(TextFieldValue(file.name)) }
     val bitmap = BitmapFactory.decodeFile(file.absolutePath)
     var showDeleteDialog by remember { mutableStateOf(false) }
