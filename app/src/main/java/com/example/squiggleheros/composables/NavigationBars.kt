@@ -11,6 +11,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -19,7 +20,7 @@ import com.example.squiggleheros.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SimpleTopAppBarCanvas(title: String, showGalleryIcon: Boolean, navController: NavController, onSaveClick: () -> Unit,
+fun SimpleTopAppBarCanvas(title: String, onSaveClick: () -> Unit,
                           onNewDrawingClick: ()-> Unit, onGalleryClick: ()->Unit) {
     TopAppBar(
 
@@ -64,8 +65,7 @@ fun SimpleTopAppBarCanvas(title: String, showGalleryIcon: Boolean, navController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SimpleAppTopBarDetail(title: String, showGalleryIcon: Boolean, navController: NavController,
-                          onNewDrawingClick: ()-> Unit, onGalleryClick: ()->Unit){
+fun SimpleAppTopBarDetail(title: String, onNewDrawingClick: ()-> Unit, onGalleryClick: ()->Unit){
     TopAppBar(
         title = { Text(text = title) },
         colors = TopAppBarDefaults.topAppBarColors(
@@ -74,7 +74,7 @@ fun SimpleAppTopBarDetail(title: String, showGalleryIcon: Boolean, navController
         actions = {
             IconButton(onClick = onNewDrawingClick) {
                 Icon(
-                    painterResource(id = R.drawable.renew),
+                    painterResource(id = R.drawable.canvas),
                     contentDescription = "New Drawing",
                     Modifier.size(30.dp),
                     tint = colorResource(id = R.color.CornflowerBlue)
@@ -97,8 +97,8 @@ fun SimpleAppTopBarDetail(title: String, showGalleryIcon: Boolean, navController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SimpleAppTopBarGallery(title: String, showGalleryIcon: Boolean, navController: NavController,
-                          onNewDrawingClick: ()-> Unit, onFilterFavoritesClick: ()->Unit , showFavoritesOnly: Boolean){
+fun SimpleAppTopBarGallery(title: String, onNewDrawingClick: ()-> Unit,
+                           onFilterFavoritesClick: ()->Unit , showFavoritesOnly: Boolean){
     TopAppBar(
         title = { Text(text = title) },
         colors = TopAppBarDefaults.topAppBarColors(
@@ -107,7 +107,7 @@ fun SimpleAppTopBarGallery(title: String, showGalleryIcon: Boolean, navControlle
         actions = {
             IconButton(onClick = onNewDrawingClick) {
                 Icon(
-                    painterResource(id = R.drawable.renew),
+                    painterResource(id = R.drawable.canvas),
                     contentDescription = "New Drawing",
                     Modifier.size(30.dp),
                     tint = colorResource(id = R.color.CornflowerBlue)
@@ -118,9 +118,10 @@ fun SimpleAppTopBarGallery(title: String, showGalleryIcon: Boolean, navControlle
             IconButton(onClick = onFilterFavoritesClick) {
                 Icon(
                     painter = painterResource(id = if (showFavoritesOnly) R.drawable.ic_favorite else R.drawable.ic_favorite_border),
+                    tint = Color.Red,
                     contentDescription = "Filter Favorites",
-                    Modifier.size(30.dp)
-                )
+                    modifier = Modifier.size(30.dp)
+                    )
             }
         }
     )

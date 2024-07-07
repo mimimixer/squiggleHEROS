@@ -3,11 +3,11 @@
     <string name="canvas_screen">Canvas</string>
     <string name="detail_screen">Detail</string>
     <string name="gallery_screen">Squiggle Gallery</string>
-    <string name="brushcolor">Brush</string>
+    <string name="brush">Brush</string>
     <string name="color">Color</string>
     <string name="eraser">Eraser</string>
     <string name="brushsize">Size</string>
-    <string name="background_color">Backgrnd</string>
+    <string name="background_color">Bckgrnd</string>
     <string name="filename">Filename</string>
     <string name="undo">Undo</string>
     <string name="undo_last">Last action undone</string>

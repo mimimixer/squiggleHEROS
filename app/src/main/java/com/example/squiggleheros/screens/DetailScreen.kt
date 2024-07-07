@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -36,7 +35,7 @@ import java.nio.charset.StandardCharsets
 fun DetailScreen(navController: NavController, imagePath: String) {
     val context = LocalContext.current
     var file by remember { mutableStateOf(File(imagePath)) }
-    var fileName by remember { mutableStateOf(TextFieldValue(file.name)) }
+    val fileName by remember { mutableStateOf(TextFieldValue(file.name)) }
     val bitmap = BitmapFactory.decodeFile(file.absolutePath)
     var showDeleteDialog by remember { mutableStateOf(false) }
 
@@ -187,7 +186,7 @@ fun EditIcon(navController: NavController, filePath: String) {
                 navController.navigate("canvas_screen?imagePath=$encodedPath")
             }
         ) {
-            Icon(painterResource(id = R.drawable.draw),
+            Icon(painterResource(id = R.drawable.brush),
                 contentDescription = "Edit Image",
                 Modifier.size(100.dp),
                 tint = colorResource(id = R.color.Orange)
