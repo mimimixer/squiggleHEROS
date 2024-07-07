@@ -95,6 +95,14 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
     var hasUnsavedChanges by remember { mutableStateOf(false) }
     val pendingNavigationRoute by remember { mutableStateOf<String?>(null) }
     var showNewDrawingDialog by remember { mutableStateOf(false) }
+    var showEraserSizeLabel: Int
+    if (currentEraserSize == 32f){
+        showEraserSizeLabel=2
+    } else if (currentEraserSize == 48f){
+        showEraserSizeLabel=3
+    } else{
+        showEraserSizeLabel=1
+    }
 
     var navigationTarget by remember { mutableStateOf("") }
 
@@ -205,7 +213,7 @@ fun CanvasScreen(navController: NavController, imagePath: String?) {
                 )
                 //eraser
                 NavigationBarItem(
-                    label = { Text(getString(context, R.string.eraser)) },
+                    label = { Text("${getString(context, R.string.eraser)}${showEraserSizeLabel}")},
                     icon = {
                         Icon(
                             painterResource(id = R.drawable.eraser),

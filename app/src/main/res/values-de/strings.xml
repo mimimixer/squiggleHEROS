@@ -5,9 +5,9 @@
     <string name="gallery_screen">Squiggle Galerie</string>
     <string name="brush">Pinsel</string>
     <string name="color">Farbe</string>
-    <string name="eraser">Radierer</string>
+    <string name="eraser">Radier</string>
     <string name="brushsize">Größe</string>
-    <string name="background_color">Hntrgrnd</string>
+    <string name="background_color">Hntgrnd</string>
     <string name="filename">Dateiname</string>
     <string name="undo">Zurück</string>
     <string name="undo_last">Letzte Handlung wurde rückgängig gemacht</string>
