@@ -19,7 +19,7 @@ can like your favourite squiggles, show ONLY your favourite squiggles, and acces
 When accessing a drawing, you can review it, you can continue drawing, you can delete the drawing, you can rename it if you want and save it to the main gallery of your phone.
 ### **Languages:** 
 The app works completely offline and is available in english and german. For changing the language of the app you will need to change the main language of your phone in the settings.
-### **squiggle sharing:**
+### **Sharing:**
 You can save your squiggles into your phone gallery to be able to share it with other apps. For doing so you will need to press the save button in your detail screen.
 ### **ohther usage info:**
 - The app is ment to be used exclusively in portrait mode. This means you will not be able to rotate the app into landscape mode.
